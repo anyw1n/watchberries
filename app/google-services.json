@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "688297014251",
+    "project_id": "watchberries-project",
+    "storage_bucket": "watchberries-project.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:688297014251:android:220bdf28b2076e27955fae",
+        "android_client_info": {
+          "package_name": "alexeyzhizhensky.watchberries"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "688297014251-44q1u992e3saa24gpftvbr1ej7p0hv72.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD-ZaPpzs8GPASH7g1qbneqwD4hIZoB3-Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "688297014251-44q1u992e3saa24gpftvbr1ej7p0hv72.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
