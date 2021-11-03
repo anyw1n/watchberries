@@ -33,6 +33,9 @@ android {
 }
 
 dependencies {
+    implementation "com.squareup.retrofit2:retrofit:$rootProject.retrofitVersion"
+    implementation "com.squareup.retrofit2:converter-gson:$rootProject.retrofitGsonVersion"
+
     implementation platform("com.google.firebase:firebase-bom:$rootProject.firebaseBomVersion")
 
     implementation "com.google.firebase:firebase-analytics-ktx"

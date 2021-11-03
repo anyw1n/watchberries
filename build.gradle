@@ -11,8 +11,10 @@ buildscript {
         googleServicesVersion = '4.3.10'
         gradleVersion = '7.0.3'
         kotlinVersion = '1.5.31'
-        ktxVersion = '1.6.0'
+        ktxVersion = '1.7.0'
         materialVersion = '1.4.0'
+        retrofitVersion = '2.9.0'
+        retrofitGsonVersion = '2.5.0'
     }
 
     repositories {
