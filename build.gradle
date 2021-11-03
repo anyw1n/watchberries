@@ -10,6 +10,7 @@ buildscript {
         firebaseBomVersion = '29.0.0'
         googleServicesVersion = '4.3.10'
         gradleVersion = '7.0.3'
+        hiltVersion = '2.38.1'
         kotlinVersion = '1.5.31'
         ktxVersion = '1.7.0'
         materialVersion = '1.4.0'
@@ -24,6 +25,8 @@ buildscript {
     }
 
     dependencies {
+        classpath "com.google.dagger:hilt-android-gradle-plugin:$hiltVersion"
+
         classpath "com.google.gms:google-services:$googleServicesVersion"
 
         classpath "com.android.tools.build:gradle:$gradleVersion"

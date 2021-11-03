@@ -1,7 +1,9 @@
 package alexeyzhizhensky.watchberries.services
 
 import com.google.firebase.messaging.FirebaseMessagingService
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class WbFirebaseMessagingService : FirebaseMessagingService() {
 
     override fun onNewToken(token: String) {
