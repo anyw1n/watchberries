@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Watchberries</string>
+    <string name="add_new_product">Add new product</string>
 </resources>
