@@ -4,6 +4,10 @@ import alexeyzhizhensky.watchberries.data.Product
 import alexeyzhizhensky.watchberries.data.SkuRequestBody
 import alexeyzhizhensky.watchberries.data.TokenRequestBody
 import alexeyzhizhensky.watchberries.data.User
+import com.google.gson.GsonBuilder
+import com.google.gson.JsonDeserializer
+import com.google.gson.JsonPrimitive
+import com.google.gson.JsonSerializer
 import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -15,6 +19,7 @@ import retrofit2.http.POST
 import retrofit2.http.PUT
 import retrofit2.http.Path
 import retrofit2.http.Query
+import java.time.LocalDateTime
 import java.util.UUID
 
 interface WatchberriesApiService {
@@ -55,9 +60,22 @@ interface WatchberriesApiService {
 
         private const val BASE_URL = "http://132.226.208.67/api/"
 
+        private val localDateTimeSerializer = JsonSerializer<LocalDateTime> { localDateTime, _, _ ->
+            JsonPrimitive(localDateTime.toString())
+        }
+
+        private val localDateTimeDeserializer = JsonDeserializer { json, _, _ ->
+            LocalDateTime.parse(json.asJsonPrimitive.asString)
+        }
+
+        private val gson = GsonBuilder()
+            .registerTypeAdapter(LocalDateTime::class.java, localDateTimeSerializer)
+            .registerTypeAdapter(LocalDateTime::class.java, localDateTimeDeserializer)
+            .create()
+
         fun create() = Retrofit.Builder()
             .baseUrl(BASE_URL)
-            .addConverterFactory(GsonConverterFactory.create())
+            .addConverterFactory(GsonConverterFactory.create(gson))
             .build()
             .create<WatchberriesApiService>()
     }
