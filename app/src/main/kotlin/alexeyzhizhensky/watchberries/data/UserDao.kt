@@ -10,7 +10,7 @@ import androidx.room.Update
 interface UserDao {
 
     @Query("SELECT EXISTS(SELECT * FROM user)")
-    suspend fun isUserExists(): Boolean
+    suspend fun exists(): Boolean
 
     @Query("SELECT * FROM user LIMIT 1")
     suspend fun get(): User

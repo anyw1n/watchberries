@@ -13,7 +13,7 @@ class UserRepository @Inject constructor(
     private val service: WatchberriesApiService
 ) {
 
-    suspend fun isUserExists() = userDao.isUserExists()
+    suspend fun isUserExists() = userDao.exists()
 
     suspend fun getUser() = userDao.get()
 
