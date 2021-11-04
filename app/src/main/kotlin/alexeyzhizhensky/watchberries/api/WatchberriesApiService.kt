@@ -1,6 +1,13 @@
-package alexeyzhizhensky.watchberries.data
+package alexeyzhizhensky.watchberries.api
 
+import alexeyzhizhensky.watchberries.data.Product
+import alexeyzhizhensky.watchberries.data.SkuRequestBody
+import alexeyzhizhensky.watchberries.data.TokenRequestBody
+import alexeyzhizhensky.watchberries.data.User
 import retrofit2.Call
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.create
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
@@ -39,6 +46,19 @@ interface WatchberriesApiService {
     @GET("products")
     fun getProducts(
         @Query("user_id") userId: Int,
-        @Query("key") key: UUID
+        @Query("key") key: UUID,
+        @Query("page") page: Int,
+        @Query("limit") limit: Int
     ): Call<List<Product>>
+
+    companion object {
+
+        private const val BASE_URL = "http://132.226.208.67/api/"
+
+        fun create() = Retrofit.Builder()
+            .baseUrl(BASE_URL)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+            .create<WatchberriesApiService>()
+    }
 }
