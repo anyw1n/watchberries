@@ -1,10 +1,13 @@
 package alexeyzhizhensky.watchberries.data
 
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 import java.time.LocalDateTime
 import java.util.UUID
 
+@Entity
 data class User(
-    val id: Int,
+    @PrimaryKey val id: Int,
     val token: String,
     val key: UUID,
     val lastSync: LocalDateTime,
