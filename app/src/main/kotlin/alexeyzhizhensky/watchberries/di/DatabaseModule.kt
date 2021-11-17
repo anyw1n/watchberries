@@ -1,6 +1,6 @@
 package alexeyzhizhensky.watchberries.di
 
-import alexeyzhizhensky.watchberries.data.WbDatabase
+import alexeyzhizhensky.watchberries.data.room.WbDatabase
 import android.content.Context
 import dagger.Module
 import dagger.Provides
@@ -15,8 +15,14 @@ class DatabaseModule {
 
     @Singleton
     @Provides
-    fun provideDatabase(@ApplicationContext context: Context) = WbDatabase.getInstance(context)
+    fun provideDatabase(@ApplicationContext context: Context) = WbDatabase.create(context)
 
     @Provides
     fun provideUserDao(database: WbDatabase) = database.userDao()
+
+    @Provides
+    fun provideProductRemoteKeyDao(database: WbDatabase) = database.productRemoteKeyDao()
+
+    @Provides
+    fun provideProductDao(database: WbDatabase) = database.productDao()
 }

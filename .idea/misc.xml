@@ -3,9 +3,22 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Projects/Kotlin/watchberries/app/src/main/res/drawable/borderless_button_background.xml" value="1.707142857142857" />
+        <entry key="..\:/Projects/Kotlin/watchberries/app/src/main/res/drawable/ic_group_9.xml" value="0.2703125" />
+        <entry key="..\:/Projects/Kotlin/watchberries/app/src/main/res/drawable/ic_launcher_foreground.xml" value="0.2703125" />
+        <entry key="..\:/Projects/Kotlin/watchberries/app/src/main/res/drawable/image_placeholder_animated_vector.xml" value="0.2703125" />
+        <entry key="..\:/Projects/Kotlin/watchberries/app/src/main/res/drawable/image_placeholder_vector.xml" value="0.2703125" />
         <entry key="..\:/Projects/Kotlin/watchberries/app/src/main/res/layout/activity_main.xml" value="0.2542991141219385" />
+        <entry key="..\:/Projects/Kotlin/watchberries/app/src/main/res/layout/app_bar.xml" value="0.4" />
+        <entry key="..\:/Projects/Kotlin/watchberries/app/src/main/res/layout/bottom_sheet_sort.xml" value="0.4" />
+        <entry key="..\:/Projects/Kotlin/watchberries/app/src/main/res/layout/dialog_add_product.xml" value="0.25416666666666665" />
         <entry key="..\:/Projects/Kotlin/watchberries/app/src/main/res/layout/fragment_product_list.xml" value="0.25416666666666665" />
-        <entry key="..\:/Projects/Kotlin/watchberries/app/src/main/res/layout/list_item_product.xml" value="0.25416666666666665" />
+        <entry key="..\:/Projects/Kotlin/watchberries/app/src/main/res/layout/list_item_load_state.xml" value="0.4" />
+        <entry key="..\:/Projects/Kotlin/watchberries/app/src/main/res/layout/list_item_product.xml" value="0.536" />
+        <entry key="..\:/Projects/Kotlin/watchberries/app/src/main/res/layout/list_item_top.xml" value="0.25416666666666665" />
+        <entry key="..\:/Projects/Kotlin/watchberries/app/src/main/res/layout/sdasdsa.xml" value="0.25416666666666665" />
+        <entry key="..\:/Projects/Kotlin/watchberries/app/src/main/res/menu/menu_product_list.xml" value="0.25416666666666665" />
+        <entry key="..\:/Projects/Kotlin/watchberries/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" value="0.2703125" />
       </map>
     </option>
   </component>
