@@ -19,6 +19,9 @@
         <action
             android:id="@+id/action_productListFragment_to_sortBottomSheetDialogFragment"
             app:destination="@id/sortBottomSheetDialogFragment" />
+        <action
+            android:id="@+id/action_productListFragment_to_productDetailFragment"
+            app:destination="@id/productDetailFragment" />
     </fragment>
     <dialog
         android:id="@+id/addProductDialogFragment"
@@ -41,4 +44,12 @@
             android:name="sort"
             app:argType="string" />
     </dialog>
+    <fragment
+        android:id="@+id/productDetailFragment"
+        android:name="alexeyzhizhensky.watchberries.ui.ProductDetailFragment"
+        android:label="ProductDetailFragment" >
+        <argument
+            android:name="sku"
+            app:argType="integer" />
+    </fragment>
 </navigation>
