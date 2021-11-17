@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<animated-vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:drawable="@drawable/image_placeholder_vector">
+
+    <target
+        android:name="one"
+        android:animation="@animator/fillalpha_one" />
+
+    <target
+        android:name="two"
+        android:animation="@animator/fillalpha_two" />
+
+    <target
+        android:name="three"
+        android:animation="@animator/fillalpha_three" />
+</animated-vector>
