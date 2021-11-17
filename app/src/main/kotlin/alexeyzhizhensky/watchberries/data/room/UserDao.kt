@@ -1,21 +1,17 @@
-package alexeyzhizhensky.watchberries.data
+package alexeyzhizhensky.watchberries.data.room
 
 import androidx.room.Dao
 import androidx.room.Insert
-import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
 
 @Dao
 interface UserDao {
 
-    @Query("SELECT EXISTS(SELECT * FROM user)")
-    suspend fun exists(): Boolean
-
     @Query("SELECT * FROM user LIMIT 1")
-    suspend fun get(): User
+    suspend fun get(): User?
 
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    @Insert
     suspend fun insert(user: User)
 
     @Update

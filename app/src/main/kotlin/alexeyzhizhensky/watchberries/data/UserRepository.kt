@@ -1,60 +1,39 @@
 package alexeyzhizhensky.watchberries.data
 
-import alexeyzhizhensky.watchberries.api.WatchberriesApiService
-import alexeyzhizhensky.watchberries.utils.asSuspend
-import kotlinx.coroutines.ExperimentalCoroutinesApi
+import alexeyzhizhensky.watchberries.data.room.User
+import alexeyzhizhensky.watchberries.data.room.UserDao
+import alexeyzhizhensky.watchberries.network.TokenRequest
+import alexeyzhizhensky.watchberries.network.WbApiService
+import alexeyzhizhensky.watchberries.utils.suspend
+import com.google.firebase.messaging.FirebaseMessaging
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-@ExperimentalCoroutinesApi
 class UserRepository @Inject constructor(
     private val userDao: UserDao,
-    private val service: WatchberriesApiService
+    private val service: WbApiService
 ) {
 
-    suspend fun isUserExists() = userDao.exists()
+    private var user: User? = null
 
-    suspend fun getUser() = userDao.get()
+    suspend fun getUser() = user ?: initUser()
 
-    suspend fun createUser(token: String) {
-        val user = service.createUser(TokenRequestBody(token)).asSuspend().body()
-            ?: return
+    private suspend fun initUser(): User {
+        val user = userDao.get() ?: createUser().also { userDao.insert(it) }
+        this.user = user
+        return user
+    }
 
-        userDao.insert(user)
+    private suspend fun createUser() = FirebaseMessaging.getInstance().token.suspend().let {
+        service.createUser(TokenRequest(it)).suspend()
     }
 
     suspend fun updateToken(token: String) {
-        val user = getUser()
-        val updatedUser = service.updateUser(
-            user.id,
-            user.key,
-            TokenRequestBody(token)
-        ).asSuspend().body() ?: return
-
-        userDao.update(updatedUser)
-    }
-
-    // TODO: 11/4/2021 add network listener
-    suspend fun addSku(sku: Int) {
-        val user = getUser()
-        val updatedUser = service.addSku(
-            user.id,
-            user.key,
-            SkuRequestBody(sku)
-        ).asSuspend().body() ?: return
-
-        userDao.update(updatedUser)
-    }
-
-    suspend fun removeSku(sku: Int) {
-        val user = getUser()
-        val updatedUser = service.deleteSku(
-            user.id,
-            user.key,
-            SkuRequestBody(sku)
-        ).asSuspend().body() ?: return
-
-        userDao.update(updatedUser)
+        getUser().let { user ->
+            service.updateUser(user.id, user.key, TokenRequest(token)).suspend().also {
+                userDao.update(it)
+            }
+        }
     }
 }
