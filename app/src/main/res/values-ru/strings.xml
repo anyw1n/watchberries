@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="add_new_product">Добавить новый товар</string>
+    <string name="delete_product_title">Удалить товар?</string>
+    <string name="delete_product_message">Вы всегда можете добавить его обратно.</string>
+    <string name="sku">Артикул</string>
+    <string name="add">Добавить</string>
+    <string name="cancel">Отмена</string>
+    <string name="delete">Удалить</string>
+    <string name="not_available">Нет в наличии</string>
+    <string name="last_update">Последнее обновление: %s</string>
+    <string name="retry">Повторить</string>
+    <string name="product_image">Изображение товара</string>
+    <string name="product_trend_icon">Иконка тренда товара</string>
+    <string name="sort">Сортировать</string>
+    <string name="by">По</string>
+    <string name="order">Порядок</string>
+    <string name="apply">Применить</string>
+    <string name="please_try_later">%s. Пожалуйста, попробуйте позже</string>
+    <string name="internet_connection_exception">Нет подключения к интернету</string>
+    <string name="network_connection_lost">Пропало подключение к интернету</string>
+    <string name="server_response_exception">Неожиданный ответ от сервера</string>
+    <string name="page_not_found_exception">Ошибка сервера, страница не найдена</string>
+    <string name="unavailable_exception">Сервер недоступен</string>
+    <string name="unknown_server_error">Неизвестная ошибка сервера</string>
+    <string name="server_parse_error">Ошибка парсинга страницы магазина</string>
+    <string name="already_added_error">Товар уже был добавлен</string>
+    <string name="server_db_error">Ошибка базы данных сервера</string>
+    <string name="unknown_error">Неизвестная ошибка</string>
+    <string name="sort_error">Ошибка сортировки</string>
+    <string name="index_out_of_bounds">Индекс за пределами</string>
+    <string name="invalid_sku">Неверный артикул</string>
+    <string-array name="sort_field_names">
+        <item>Порядок добавления</item>
+        <item>Артикул</item>
+        <item>Бренд</item>
+        <item>Название</item>
+        <item>Обновление</item>
+    </string-array>
+    <string-array name="sort_order_names">
+        <item>По возрастанию</item>
+        <item>По убыванию</item>
+    </string-array>
+    <string name="become_available_title">Товар появился в продаже!</string>
+    <string name="become_available_message">Товар %1$.30s появился в продаже, его цена составила %2$s ₽</string>
+    <string name="price_drop_title">Цена снизилась!</string>
+    <string name="price_drop_message">Цена на товар %1$.30s снизилась на %3$s ₽ и составила %2$s ₽</string>
+    <string name="notification_channel_name">Обновления товаров</string>
+    <string name="notification_channel_description">Уведомления про появление на складе товара или снижение цены на него</string>
+    <string name="internal_server_error">Внутренняя ошибка сервера</string>
+</resources>

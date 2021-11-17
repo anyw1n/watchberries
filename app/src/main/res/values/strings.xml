@@ -1,4 +1,52 @@
 <resources>
-    <string name="app_name">Watchberries</string>
+    <string name="app_name" translatable="false">Watchberries</string>
     <string name="add_new_product">Add new product</string>
+    <string name="delete_product_title">Delete product?</string>
+    <string name="delete_product_message">You always can add it again later.</string>
+    <string name="sku">SKU</string>
+    <string name="add">Add</string>
+    <string name="cancel">Cancel</string>
+    <string name="delete">Delete</string>
+    <string name="not_available">N/A</string>
+    <string name="price" translatable="false">%d ₽</string>
+    <string name="last_update">Last update: %s</string>
+    <string name="retry">Retry</string>
+    <string name="product_image">Product image</string>
+    <string name="product_trend_icon">Product trend icon</string>
+    <string name="sort">Sort</string>
+    <string name="by">By</string>
+    <string name="order">Order</string>
+    <string name="apply">Apply</string>
+    <string name="please_try_later">%s. Please try later</string>
+    <string name="internet_connection_exception">Can\'t connect to internet</string>
+    <string name="network_connection_lost">Network connection lost</string>
+    <string name="server_response_exception">Unexpected server response</string>
+    <string name="page_not_found_exception">Server error, page not found</string>
+    <string name="unavailable_exception">Server unavailable</string>
+    <string name="internal_server_error">Internal server error</string>
+    <string name="unknown_server_error">Unknown server error</string>
+    <string name="server_parse_error">Error parsing shop page</string>
+    <string name="already_added_error">Product was already added</string>
+    <string name="server_db_error">Server database error</string>
+    <string name="unknown_error">Unknown error</string>
+    <string name="sort_error">Sort error</string>
+    <string name="index_out_of_bounds">Index out of bounds</string>
+    <string name="invalid_sku">Invalid SKU</string>
+    <string-array name="sort_field_names">
+        <item>Order of addition</item>
+        <item>SKU</item>
+        <item>Brand</item>
+        <item>Title</item>
+        <item>Update</item>
+    </string-array>
+    <string-array name="sort_order_names">
+        <item>Ascending</item>
+        <item>Descending</item>
+    </string-array>
+    <string name="become_available_title">The product is now on sale!</string>
+    <string name="become_available_message">%1$.30s appeared on sale, it\'s price is %2$s ₽</string>
+    <string name="price_drop_title">The price has dropped!</string>
+    <string name="price_drop_message">The price of %1$.30s decreased by %3$s ₽ and amounted to %2$s ₽</string>
+    <string name="notification_channel_name">Product updates</string>
+    <string name="notification_channel_description">Notifications about product price drops and availability</string>
 </resources>
