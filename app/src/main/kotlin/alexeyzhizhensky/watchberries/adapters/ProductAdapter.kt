@@ -1,48 +1,54 @@
 package alexeyzhizhensky.watchberries.adapters
 
-import alexeyzhizhensky.watchberries.data.Product
+import alexeyzhizhensky.watchberries.adapters.viewholders.ProductViewHolder
+import alexeyzhizhensky.watchberries.data.room.Product
 import alexeyzhizhensky.watchberries.databinding.ListItemProductBinding
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.ListAdapter
-import androidx.recyclerview.widget.RecyclerView
+import dagger.hilt.android.qualifiers.ApplicationContext
+import javax.inject.Inject
 
-class ProductAdapter : ListAdapter<Product, ProductAdapter.ViewHolder>(itemComparator) {
+class ProductAdapter @Inject constructor(
+    @ApplicationContext private val context: Context
+) : PagingDataAdapter<Product, ProductViewHolder>(diffCallback) {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+    private var onItemClick: ((Int) -> Unit)? = null
+    private var onItemLongClick: ((Int) -> Unit)? = null
+
+    fun setOnItemClickListener(onItemClick: (Int) -> Unit) {
+        this.onItemClick = onItemClick
+    }
+
+    fun setOnItemLongClickListener(onItemLongClick: (Int) -> Unit) {
+        this.onItemLongClick = onItemLongClick
+    }
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProductViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
         val binding = ListItemProductBinding.inflate(layoutInflater, parent, false)
-        return ViewHolder(binding)
+        return ProductViewHolder(binding, context, onItemClick, onItemLongClick)
     }
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(getItem(position))
-    }
-
-    class ViewHolder(
-        private val binding: ListItemProductBinding
-    ) : RecyclerView.ViewHolder(binding.root) {
-
-        fun bind(product: Product) {
-            with(binding) {
-                titleTextView.text = product.title
-            }
-        }
+    override fun onBindViewHolder(holder: ProductViewHolder, position: Int) {
+        getItem(position)?.let { holder.bind(it) }
     }
 
     private companion object {
 
-        private val itemComparator = object : DiffUtil.ItemCallback<Product>() {
+        val diffCallback = object : DiffUtil.ItemCallback<Product>() {
 
             override fun areItemsTheSame(oldItem: Product, newItem: Product): Boolean {
                 return oldItem.sku == newItem.sku
             }
 
             override fun areContentsTheSame(oldItem: Product, newItem: Product): Boolean {
-                return oldItem.title == newItem.title &&
-                        oldItem.brand == newItem.brand &&
-                        oldItem.prices == newItem.prices
+                return oldItem.brand == newItem.brand &&
+                        oldItem.title == newItem.title &&
+                        oldItem.lastPrice == newItem.lastPrice &&
+                        oldItem.trend == newItem.trend
             }
         }
     }
