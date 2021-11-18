@@ -82,7 +82,7 @@ class ProductListFragment : Fragment() {
     // Functions
 
     private fun FragmentProductListBinding.setup() {
-        toolbar.inflateMenu(R.menu.menu_product_list)
+        include.toolbar.inflateMenu(R.menu.menu_product_list)
 
         recyclerView.apply {
             adapter = ConcatAdapter(
@@ -99,7 +99,7 @@ class ProductListFragment : Fragment() {
     }
 
     private fun FragmentProductListBinding.setListeners() {
-        toolbar.setOnMenuItemClickListener {
+        include.toolbar.setOnMenuItemClickListener {
             when (it.itemId) {
                 R.id.action_sort -> {
                     val action = ProductListFragmentDirections
