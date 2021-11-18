@@ -56,9 +56,6 @@ class ProductListFragment : Fragment() {
         setFragmentResultListener(DELETE_SKU_REQUEST_KEY) { _, bundle ->
             viewModel.removeProduct(bundle.getInt(SKU_KEY))
         }
-        setFragmentResultListener(CHANGE_SORT_REQUEST_KEY) { _, bundle ->
-            viewModel.changeSort(bundle.getString(SORT_KEY))
-        }
     }
 
     override fun onCreateView(
@@ -103,9 +100,7 @@ class ProductListFragment : Fragment() {
             when (it.itemId) {
                 R.id.action_sort -> {
                     val action = ProductListFragmentDirections
-                        .actionProductListFragmentToSortBottomSheetDialogFragment(
-                            viewModel.getSort()
-                        )
+                        .actionProductListFragmentToSortBottomSheetDialogFragment()
                     findNavController().navigate(action)
                     true
                 }
@@ -189,9 +184,6 @@ class ProductListFragment : Fragment() {
     // Constants
 
     companion object {
-
-        const val CHANGE_SORT_REQUEST_KEY = "CHANGE_SORT_REQUEST"
-        const val SORT_KEY = "SORT"
 
         const val ADD_SKU_REQUEST_KEY = "ADD_SKU_REQUEST"
         const val DELETE_SKU_REQUEST_KEY = "DELETE_SKU_REQUEST"

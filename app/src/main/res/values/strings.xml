@@ -29,7 +29,6 @@
     <string name="already_added_error">Product was already added</string>
     <string name="server_db_error">Server database error</string>
     <string name="unknown_error">Unknown error</string>
-    <string name="sort_error">Sort error</string>
     <string name="index_out_of_bounds">Index out of bounds</string>
     <string name="invalid_sku">Invalid SKU</string>
     <string-array name="sort_field_names">

@@ -30,12 +30,5 @@ data class Sort(
     companion object {
 
         val DEFAULT = Sort(Field.ID, Order.ASC)
-
-        fun fromString(string: String?): Sort? = runCatching {
-            val stringElements = string!!.split("_")
-            val field = Field.valueOf(stringElements[0].uppercase())
-            val order = Order.valueOf(stringElements[1].uppercase())
-            Sort(field, order)
-        }.getOrNull()
     }
 }

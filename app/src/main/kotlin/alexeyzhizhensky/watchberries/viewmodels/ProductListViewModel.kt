@@ -3,7 +3,6 @@ package alexeyzhizhensky.watchberries.viewmodels
 import alexeyzhizhensky.watchberries.R
 import alexeyzhizhensky.watchberries.data.ProductRepository
 import alexeyzhizhensky.watchberries.data.SharedPrefsRepository
-import alexeyzhizhensky.watchberries.data.Sort
 import alexeyzhizhensky.watchberries.data.WbException
 import alexeyzhizhensky.watchberries.network.WbConnectivityManager
 import androidx.annotation.StringRes
@@ -58,17 +57,6 @@ class ProductListViewModel @Inject constructor(
 
     fun removeProduct(sku: Int) = viewModelScope.launch {
         execute { productRepository.deleteSku(sku) }
-    }
-
-    fun getSort() = sharedPrefsRepository.sort.value.toString()
-
-    fun changeSort(new: String?) = viewModelScope.launch {
-        val sort = Sort.fromString(new)
-        if (sort != null) {
-            sharedPrefsRepository.setSort(sort)
-        } else {
-            eventChannel.send(Event.ShowToast(R.string.sort_error))
-        }
     }
 
     private suspend fun execute(block: suspend () -> Unit) {

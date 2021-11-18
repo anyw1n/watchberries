@@ -43,11 +43,7 @@
     <dialog
         android:id="@+id/sortBottomSheetDialogFragment"
         android:name="alexeyzhizhensky.watchberries.ui.SortBottomSheetDialogFragment"
-        android:label="SortBottomSheetDialogFragment">
-        <argument
-            android:name="sort"
-            app:argType="string" />
-    </dialog>
+        android:label="SortBottomSheetDialogFragment"/>
     <fragment
         android:id="@+id/productDetailFragment"
         android:name="alexeyzhizhensky.watchberries.ui.ProductDetailFragment"

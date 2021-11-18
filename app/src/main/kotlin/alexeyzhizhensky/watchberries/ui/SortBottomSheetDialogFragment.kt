@@ -5,6 +5,7 @@ import alexeyzhizhensky.watchberries.data.Sort
 import alexeyzhizhensky.watchberries.data.WbException
 import alexeyzhizhensky.watchberries.databinding.BottomSheetSortBinding
 import alexeyzhizhensky.watchberries.utils.toast
+import alexeyzhizhensky.watchberries.viewmodels.SortBottomSheetViewModel
 import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -12,17 +13,17 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import androidx.annotation.ArrayRes
-import androidx.core.os.bundleOf
-import androidx.fragment.app.setFragmentResult
-import androidx.navigation.fragment.navArgs
+import androidx.fragment.app.viewModels
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class SortBottomSheetDialogFragment : BottomSheetDialogFragment() {
+
+    private val viewModel: SortBottomSheetViewModel by viewModels()
 
     private var _binding: BottomSheetSortBinding? = null
     private val binding get() = _binding!!
-
-    private val args: SortBottomSheetDialogFragmentArgs by navArgs()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -42,7 +43,7 @@ class SortBottomSheetDialogFragment : BottomSheetDialogFragment() {
             orderSpinner.adapter = createAdapter(it, R.array.sort_order_names)
         }
 
-        Sort.fromString(args.sort)?.also {
+        viewModel.getSort().also {
             bySpinner.setSelection(it.by.ordinal)
             orderSpinner.setSelection(it.order.ordinal)
         }
@@ -54,10 +55,7 @@ class SortBottomSheetDialogFragment : BottomSheetDialogFragment() {
                     Sort.Order.values[orderSpinner.selectedItemPosition]
                 )
 
-                setFragmentResult(
-                    ProductListFragment.CHANGE_SORT_REQUEST_KEY,
-                    bundleOf(ProductListFragment.SORT_KEY to sort.toString())
-                )
+                viewModel.changeSort(sort)
             }.onFailure { exception ->
                 val wbException = when (exception) {
                     is IndexOutOfBoundsException -> WbException.OutOfBounds(exception)

@@ -27,7 +27,6 @@
     <string name="already_added_error">Товар уже был добавлен</string>
     <string name="server_db_error">Ошибка базы данных сервера</string>
     <string name="unknown_error">Неизвестная ошибка</string>
-    <string name="sort_error">Ошибка сортировки</string>
     <string name="index_out_of_bounds">Индекс за пределами</string>
     <string name="invalid_sku">Неверный артикул</string>
     <string-array name="sort_field_names">
