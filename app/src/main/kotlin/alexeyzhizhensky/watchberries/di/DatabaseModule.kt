@@ -25,4 +25,7 @@ class DatabaseModule {
 
     @Provides
     fun provideProductDao(database: WbDatabase) = database.productDao()
+
+    @Provides
+    fun providePriceDao(database: WbDatabase) = database.priceDao()
 }

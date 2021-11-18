@@ -1,5 +1,6 @@
 package alexeyzhizhensky.watchberries.network
 
+import alexeyzhizhensky.watchberries.data.Price
 import alexeyzhizhensky.watchberries.data.room.Product
 import alexeyzhizhensky.watchberries.data.Sort
 import alexeyzhizhensky.watchberries.data.room.User
@@ -55,6 +56,9 @@ interface WbApiService {
         @Query("limit") limit: Int,
         @Query("sort") sort: Sort
     ): Call<List<Product>>
+
+    @GET("products/{sku}/prices")
+    fun getPrices(@Path("sku") sku: Int): Call<List<Price>>
 
     companion object {
 

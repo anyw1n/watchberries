@@ -10,7 +10,8 @@ import androidx.room.TypeConverters
     entities = [
         User::class,
         ProductRemoteKey::class,
-        Product::class
+        Product::class,
+        PriceEntity::class
     ],
     version = 1,
     exportSchema = false
@@ -21,6 +22,7 @@ abstract class WbDatabase : RoomDatabase() {
     abstract fun userDao(): UserDao
     abstract fun productRemoteKeyDao(): ProductRemoteKeyDao
     abstract fun productDao(): ProductDao
+    abstract fun priceDao(): PriceDao
 
     companion object {
 
