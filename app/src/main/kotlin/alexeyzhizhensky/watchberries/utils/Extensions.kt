@@ -99,3 +99,12 @@ fun HttpException.toWbException() = when (code()) {
     HttpURLConnection.HTTP_INTERNAL_ERROR -> WbException.Http.Internal(this)
     else -> WbException.Http.Other(this)
 }
+
+fun getRelativeDateTime(context: Context, localDateTime: LocalDateTime): CharSequence =
+    DateUtils.getRelativeDateTimeString(
+        context,
+        localDateTime.toMillisWithOffset(),
+        DateUtils.MINUTE_IN_MILLIS,
+        DateUtils.WEEK_IN_MILLIS,
+        DateUtils.FORMAT_ABBREV_RELATIVE
+    )
