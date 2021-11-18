@@ -151,37 +151,38 @@ class ProductListFragment : Fragment() {
                 .flowWithLifecycle(viewLifecycleOwner.lifecycle)
                 .mapLatest { it.refresh }
                 .distinctUntilChanged()
-                .collectLatest { loadState ->
-                    if (loadState is LoadState.Error) {
-                        context?.let {
-                            val wbException = loadState.error as? WbException ?: return@let
-                            it.toast(wbException.getMessage(it))
-                        }
-                    }
-
-                    if (refreshSwiped && loadState is LoadState.Loading) {
-                        refreshSwiped = false
-                    } else {
-                        binding.swipeRefresh.isRefreshing = loadState is LoadState.Loading
-                    }
-                }
+                .collectLatest(this@ProductListFragment::handleLoadState)
         }
 
         launch {
-            viewModel.eventsFlow
-                .collectLatest { event ->
-                    when (event) {
-                        ProductListViewModel.Event.RefreshProducts -> productAdapter.refresh()
-                        is ProductListViewModel.Event.ShowToast -> context?.toast(event.textRes)
-                        is ProductListViewModel.Event.ShowException -> context?.let {
-                            it.toast(event.exception.getMessage(it))
-                        }
-                    }
-                }
+            viewModel.eventsFlow.collectLatest(this@ProductListFragment::handleEvent)
         }
 
         launch {
             viewModel.pagingDataFlow.collectLatest(productAdapter::submitData)
+        }
+    }
+
+    private fun handleLoadState(loadState: LoadState) {
+        if (loadState is LoadState.Error) {
+            context?.let {
+                val wbException = loadState.error as? WbException ?: return@let
+                it.toast(wbException.getMessage(it))
+            }
+        }
+
+        if (refreshSwiped && loadState is LoadState.Loading) {
+            refreshSwiped = false
+        } else {
+            binding.swipeRefresh.isRefreshing = loadState is LoadState.Loading
+        }
+    }
+
+    private fun handleEvent(event: ProductListViewModel.Event) = when (event) {
+        ProductListViewModel.Event.RefreshProducts -> productAdapter.refresh()
+        is ProductListViewModel.Event.ShowToast -> context?.toast(event.textRes)
+        is ProductListViewModel.Event.ShowException -> context?.let {
+            it.toast(event.exception.getMessage(it))
         }
     }
 
