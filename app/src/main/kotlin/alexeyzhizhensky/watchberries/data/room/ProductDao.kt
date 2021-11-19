@@ -12,6 +12,9 @@ interface ProductDao {
     @Query("SELECT * FROM products")
     fun observePaginated(): PagingSource<Int, Product>
 
+    @Query("SELECT * FROM products  WHERE sku = :sku LIMIT 1")
+    suspend fun getBySku(sku: Int): Product
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAll(products: List<Product>)
 

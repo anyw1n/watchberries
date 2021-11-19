@@ -29,6 +29,8 @@ class ProductRepository @Inject constructor(
         productDao.observePaginated()
     }.flow
 
+    suspend fun getProduct(sku: Int) = productDao.getBySku(sku)
+
     suspend fun addSku(sku: Int) {
         val user = userRepository.getUser()
         service.addSku(user.id, user.key, SkuRequest(sku)).suspend().apply {

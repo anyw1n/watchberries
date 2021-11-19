@@ -114,7 +114,9 @@ class ProductListFragment : Fragment() {
         }
 
         productAdapter.setOnItemClickListener {
-            // open second screen
+            val action = ProductListFragmentDirections
+                .actionProductListFragmentToProductDetailFragment(it)
+            findNavController().navigate(action)
         }
 
         productAdapter.setOnItemLongClickListener {

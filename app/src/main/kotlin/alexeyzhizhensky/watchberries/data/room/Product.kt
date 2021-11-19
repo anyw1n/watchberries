@@ -3,6 +3,7 @@ package alexeyzhizhensky.watchberries.data.room
 import alexeyzhizhensky.watchberries.R
 import alexeyzhizhensky.watchberries.data.Price
 import android.graphics.Color
+import android.net.Uri
 import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.Ignore
@@ -28,6 +29,8 @@ data class Product(
     @Ignore
     val imageUrl = IMAGE_URL.format(sku / GROUP_SIZE, sku)
 
+    val shopUri: Uri get() = Uri.parse(SHOP_URL.format(sku))
+
     enum class Trend(
         val drawableId: Int,
         val color: Int
@@ -42,5 +45,6 @@ data class Product(
 
         const val GROUP_SIZE = 10000
         const val IMAGE_URL = "https://images.wbstatic.net/big/new/%d0000/%d-1.jpg"
+        const val SHOP_URL = "https://by.wildberries.ru/catalog/%d/detail.aspx?targetUrl=WP"
     }
 }

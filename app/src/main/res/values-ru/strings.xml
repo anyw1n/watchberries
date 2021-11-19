@@ -47,4 +47,5 @@
     <string name="notification_channel_name">Обновления товаров</string>
     <string name="notification_channel_description">Уведомления про появление на складе товара или снижение цены на него</string>
     <string name="internal_server_error">Внутренняя ошибка сервера</string>
+    <string name="open_page">Открыть в приложении или браузере</string>
 </resources>
