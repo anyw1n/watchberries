@@ -5,12 +5,15 @@ import alexeyzhizhensky.watchberries.data.Price
 import alexeyzhizhensky.watchberries.data.room.Product
 import alexeyzhizhensky.watchberries.databinding.FragmentProductDetailBinding
 import alexeyzhizhensky.watchberries.utils.getRelativeDateTime
+import alexeyzhizhensky.watchberries.utils.toMillisWithOffset
 import alexeyzhizhensky.watchberries.utils.toast
 import alexeyzhizhensky.watchberries.viewmodels.ProductDetailViewModel
 import android.os.Bundle
+import android.text.format.DateUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -21,10 +24,20 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import coil.load
 import coil.transform.RoundedCornersTransformation
+import com.github.mikephil.charting.charts.LineChart
+import com.github.mikephil.charting.components.AxisBase
+import com.github.mikephil.charting.components.XAxis
+import com.github.mikephil.charting.data.Entry
+import com.github.mikephil.charting.data.LineData
+import com.github.mikephil.charting.data.LineDataSet
+import com.github.mikephil.charting.formatter.ValueFormatter
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.launch
+import java.time.LocalDateTime
+import java.time.ZoneOffset
+import java.time.temporal.ChronoUnit
 
 @AndroidEntryPoint
 class ProductDetailFragment : Fragment() {
@@ -35,6 +48,22 @@ class ProductDetailFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val args: ProductDetailFragmentArgs by navArgs()
+
+    private val pricesDataSet = LineDataSet(emptyList(), CHART_DATA_SET_LABEL)
+
+    private val xAxisValueFormatter = object : ValueFormatter() {
+
+        override fun getAxisLabel(value: Float, axis: AxisBase?): String {
+            val dateTime = LocalDateTime.ofEpochSecond(value.toLong(), 0, ZoneOffset.UTC)
+            return context?.let {
+                DateUtils.formatDateTime(
+                    it,
+                    dateTime.truncatedTo(ChronoUnit.DAYS).toMillisWithOffset(),
+                    DateUtils.FORMAT_ABBREV_MONTH
+                )
+            } ?: ""
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -65,6 +94,31 @@ class ProductDetailFragment : Fragment() {
         openLinkButton.setOnClickListener {
             context?.let { viewModel.openProductPage(it) }
         }
+
+        pricesLineChart.setup()
+    }
+
+    private fun LineChart.setup() {
+        pricesDataSet.apply {
+            mode = LineDataSet.Mode.STEPPED
+            setDrawFilled(true)
+            fillColor = ContextCompat.getColor(context, R.color.secondary_variant)
+            setDrawValues(false)
+            val lineColor = ContextCompat.getColor(context, R.color.primary)
+            color = lineColor
+            setCircleColor(lineColor)
+        }
+
+        description.isEnabled = false
+        xAxis.apply {
+            position = XAxis.XAxisPosition.BOTTOM
+            valueFormatter = xAxisValueFormatter
+            granularity = CHART_GRANULARITY
+        }
+        axisLeft.axisMinimum = CHART_Y_AXIS_MIN
+        axisRight.axisMinimum = CHART_Y_AXIS_MIN
+        legend.isEnabled = false
+        isDoubleTapToZoomEnabled = false
     }
 
     private fun subscribeToFlows() = viewLifecycleOwner.lifecycleScope.apply {
@@ -114,7 +168,21 @@ class ProductDetailFragment : Fragment() {
     }
 
     private fun FragmentProductDetailBinding.bindPrices(prices: List<Price>) {
-
+        val allPrices =
+            prices.plus(Price(LocalDateTime.now(), prices.lastOrNull()?.value ?: 0))
+        val graphValues = allPrices
+            .map { Entry(it.datetime.toEpochSecond(ZoneOffset.UTC).toFloat(), it.value.toFloat()) }
+        pricesDataSet.values = graphValues
+        pricesLineChart.apply {
+            data = LineData(pricesDataSet)
+            xAxis.apply {
+                axisMinimum = allPrices.first().datetime
+                    .truncatedTo(ChronoUnit.DAYS).toEpochSecond(ZoneOffset.UTC).toFloat()
+                axisMaximum = allPrices.last().datetime.plusDays(1)
+                    .truncatedTo(ChronoUnit.DAYS).toEpochSecond(ZoneOffset.UTC).toFloat()
+            }
+            animateY(CHART_ANIMATION_DURATION)
+        }
     }
 
     private fun FragmentProductDetailBinding.setUiStates(states: ProductDetailViewModel.UiStates) {
@@ -132,5 +200,13 @@ class ProductDetailFragment : Fragment() {
         is ProductDetailViewModel.Event.ShowException -> context?.let {
             it.toast(event.exception.getMessage(it))
         }
+    }
+
+    private companion object {
+
+        const val CHART_DATA_SET_LABEL = "Prices"
+        const val CHART_GRANULARITY = 1F * 24 * 60 * 60
+        const val CHART_Y_AXIS_MIN = 0F
+        const val CHART_ANIMATION_DURATION = 1000
     }
 }
