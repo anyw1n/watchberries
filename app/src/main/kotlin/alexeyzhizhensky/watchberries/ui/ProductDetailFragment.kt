@@ -119,6 +119,11 @@ class ProductDetailFragment : Fragment() {
         axisRight.axisMinimum = CHART_Y_AXIS_MIN
         legend.isEnabled = false
         isDoubleTapToZoomEnabled = false
+
+        val marker = ChartMarkerView(context).also {
+            it.chartView = this
+        }
+        setMarker(marker)
     }
 
     private fun subscribeToFlows() = viewLifecycleOwner.lifecycleScope.apply {
