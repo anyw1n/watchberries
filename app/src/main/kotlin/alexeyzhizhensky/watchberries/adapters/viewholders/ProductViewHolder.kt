@@ -13,8 +13,7 @@ import coil.transform.RoundedCornersTransformation
 class ProductViewHolder(
     private val binding: ListItemProductBinding,
     private val context: Context,
-    onItemClick: ((Int) -> Unit)?,
-    onItemLongClick: ((Int) -> Unit)?
+    onItemClick: ((Int) -> Unit)?
 ) : RecyclerView.ViewHolder(binding.root) {
 
     private val cornerRadius = context.resources.getDimension(R.dimen.corner_radius)
@@ -22,13 +21,7 @@ class ProductViewHolder(
     private var sku: Int? = null
 
     init {
-        with(binding) {
-            root.setOnClickListener { sku?.let { onItemClick?.invoke(it) } }
-            root.setOnLongClickListener {
-                sku?.let { onItemLongClick?.invoke(it) }
-                true
-            }
-        }
+        binding.root.setOnClickListener { sku?.let { onItemClick?.invoke(it) } }
     }
 
     fun bind(product: Product) {

@@ -14,9 +14,6 @@
             android:id="@+id/action_productListFragment_to_addProductDialogFragment"
             app:destination="@id/addProductDialogFragment" />
         <action
-            android:id="@+id/action_productListFragment_to_deleteProductDialogFragment"
-            app:destination="@id/deleteProductDialogFragment" />
-        <action
             android:id="@+id/action_productListFragment_to_sortBottomSheetDialogFragment"
             app:destination="@id/sortBottomSheetDialogFragment" />
         <action
@@ -34,12 +31,7 @@
     <dialog
         android:id="@+id/deleteProductDialogFragment"
         android:name="alexeyzhizhensky.watchberries.ui.DeleteProductDialogFragment"
-        android:label="DeleteProductDialogFragment">
-        <argument
-            android:name="sku"
-            android:defaultValue="0"
-            app:argType="integer" />
-    </dialog>
+        android:label="DeleteProductDialogFragment"/>
     <dialog
         android:id="@+id/sortBottomSheetDialogFragment"
         android:name="alexeyzhizhensky.watchberries.ui.SortBottomSheetDialogFragment"
@@ -51,5 +43,8 @@
         <argument
             android:name="sku"
             app:argType="integer" />
+        <action
+            android:id="@+id/action_productDetailFragment_to_deleteProductDialogFragment"
+            app:destination="@id/deleteProductDialogFragment" />
     </fragment>
 </navigation>

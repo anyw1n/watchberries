@@ -53,8 +53,8 @@ class ProductListFragment : Fragment() {
         setFragmentResultListener(ADD_SKU_REQUEST_KEY) { _, bundle ->
             viewModel.addProduct(bundle.getInt(SKU_KEY))
         }
-        setFragmentResultListener(DELETE_SKU_REQUEST_KEY) { _, bundle ->
-            viewModel.removeProduct(bundle.getInt(SKU_KEY))
+        setFragmentResultListener(PRODUCT_DELETED_REQUEST_KEY) { _, _ ->
+            productAdapter.refresh()
         }
     }
 
@@ -116,12 +116,6 @@ class ProductListFragment : Fragment() {
         productAdapter.setOnItemClickListener {
             val action = ProductListFragmentDirections
                 .actionProductListFragmentToProductDetailFragment(it)
-            findNavController().navigate(action)
-        }
-
-        productAdapter.setOnItemLongClickListener {
-            val action = ProductListFragmentDirections
-                .actionProductListFragmentToDeleteProductDialogFragment(it)
             findNavController().navigate(action)
         }
 
@@ -187,8 +181,8 @@ class ProductListFragment : Fragment() {
 
     companion object {
 
+        const val PRODUCT_DELETED_REQUEST_KEY = "PRODUCT_DELETED_REQUEST"
         const val ADD_SKU_REQUEST_KEY = "ADD_SKU_REQUEST"
-        const val DELETE_SKU_REQUEST_KEY = "DELETE_SKU_REQUEST"
         const val SKU_KEY = "SKU"
     }
 }

@@ -14,8 +14,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
+import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.setFragmentResult
+import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -59,6 +62,12 @@ class ProductDetailFragment : Fragment() {
             LocalDateTime.ofEpochSecond(value.toLong(), 0, ZoneOffset.UTC).format(formatter)
         } ?: ""
     }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        setFragmentResultListener(DELETE_REQUEST_KEY) { _, _ ->
+            viewModel.removeProduct()
         }
     }
 
@@ -83,6 +92,19 @@ class ProductDetailFragment : Fragment() {
     }
 
     private fun FragmentProductDetailBinding.setup() {
+        detailAppBar.toolbar.inflateMenu(R.menu.menu_product_detail)
+        detailAppBar.toolbar.setOnMenuItemClickListener {
+            when (it.itemId) {
+                R.id.action_delete -> {
+                    val action = ProductDetailFragmentDirections
+                        .actionProductDetailFragmentToDeleteProductDialogFragment()
+                    findNavController().navigate(action)
+                    true
+                }
+                else -> false
+            }
+        }
+
         detailAppBar.toolbar.apply {
             setNavigationIcon(R.drawable.ic_baseline_chevron_left_24)
             setNavigationOnClickListener { findNavController().navigateUp() }
@@ -194,22 +216,30 @@ class ProductDetailFragment : Fragment() {
             states.pricesState == ProductDetailViewModel.UiState.Loading
     }
 
-    private fun handleEvent(event: ProductDetailViewModel.Event) = when (event) {
-        is ProductDetailViewModel.Event.ShowToast -> context?.toast(event.textRes)
-        is ProductDetailViewModel.Event.ShowException -> context?.let {
-            it.toast(event.exception.getMessage(it))
+    private fun handleEvent(event: ProductDetailViewModel.Event) {
+        when (event) {
+            ProductDetailViewModel.Event.ProductDeleted -> {
+                setFragmentResult(ProductListFragment.PRODUCT_DELETED_REQUEST_KEY, bundleOf())
+                findNavController().navigateUp()
+            }
+            is ProductDetailViewModel.Event.ShowToast -> context?.toast(event.textRes)
+            is ProductDetailViewModel.Event.ShowException -> context?.let {
+                it.toast(event.exception.getMessage(it))
+            }
         }
     }
 
-    private companion object {
+    companion object {
 
-        const val CHART_DATA_SET_LABEL = "Prices"
-        const val CHART_Y_AXIS_MIN = 0F
-        const val CHART_ANIMATION_DURATION = 1000
+        const val DELETE_REQUEST_KEY = "DELETE_SKU_REQUEST"
+
         private const val HOUR_IN_SECONDS = 60 * 60
 
+        private const val CHART_DATA_SET_LABEL = "Prices"
         private const val CHART_X_AXIS_LABEL_FORMAT = "LLL d"
         private const val CHART_X_AXIS_GRANULARITY = 12F * HOUR_IN_SECONDS
         private const val CHART_X_AXIS_SPACE = 24F * HOUR_IN_SECONDS
+        private const val CHART_Y_AXIS_MIN = 0F
+        private const val CHART_ANIMATION_DURATION = 1000
     }
 }

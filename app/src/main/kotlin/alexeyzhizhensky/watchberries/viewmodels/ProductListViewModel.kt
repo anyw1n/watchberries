@@ -52,16 +52,8 @@ class ProductListViewModel @Inject constructor(
     }
 
     fun addProduct(sku: Int) = viewModelScope.launch {
-        execute { productRepository.addSku(sku) }
-    }
-
-    fun removeProduct(sku: Int) = viewModelScope.launch {
-        execute { productRepository.deleteSku(sku) }
-    }
-
-    private suspend fun execute(block: suspend () -> Unit) {
         try {
-            block()
+            productRepository.addSku(sku)
             eventChannel.send(Event.RefreshProducts)
         } catch (exception: WbException) {
             eventChannel.send(Event.ShowException(exception))

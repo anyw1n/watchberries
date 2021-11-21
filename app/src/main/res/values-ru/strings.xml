@@ -30,6 +30,7 @@
     <string name="unknown_error">Неизвестная ошибка</string>
     <string name="index_out_of_bounds">Индекс за пределами</string>
     <string name="invalid_sku">Неверный артикул</string>
+    <string name="product_not_found">Товар не найден</string>
     <string-array name="sort_field_names">
         <item>Порядок добавления</item>
         <item>Артикул</item>

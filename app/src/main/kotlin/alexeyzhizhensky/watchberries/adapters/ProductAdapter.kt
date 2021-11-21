@@ -16,20 +16,15 @@ class ProductAdapter @Inject constructor(
 ) : PagingDataAdapter<Product, ProductViewHolder>(diffCallback) {
 
     private var onItemClick: ((Int) -> Unit)? = null
-    private var onItemLongClick: ((Int) -> Unit)? = null
 
     fun setOnItemClickListener(onItemClick: (Int) -> Unit) {
         this.onItemClick = onItemClick
     }
 
-    fun setOnItemLongClickListener(onItemLongClick: (Int) -> Unit) {
-        this.onItemLongClick = onItemLongClick
-    }
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProductViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
         val binding = ListItemProductBinding.inflate(layoutInflater, parent, false)
-        return ProductViewHolder(binding, context, onItemClick, onItemLongClick)
+        return ProductViewHolder(binding, context, onItemClick)
     }
 
     override fun onBindViewHolder(holder: ProductViewHolder, position: Int) {

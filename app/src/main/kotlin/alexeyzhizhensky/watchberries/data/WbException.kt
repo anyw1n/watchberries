@@ -26,6 +26,8 @@ sealed class WbException(
 
     object InvalidSku : WbException(R.string.invalid_sku, null, false)
 
+    object ProductNotFound : WbException(R.string.product_not_found, null, false)
+
     class Unknown(cause: Throwable) : WbException(R.string.unknown_error, cause, false)
 
     sealed class Http(

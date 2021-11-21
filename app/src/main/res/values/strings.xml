@@ -32,6 +32,7 @@
     <string name="unknown_error">Unknown error</string>
     <string name="index_out_of_bounds">Index out of bounds</string>
     <string name="invalid_sku">Invalid SKU</string>
+    <string name="product_not_found">Product not found</string>
     <string-array name="sort_field_names">
         <item>Order of addition</item>
         <item>SKU</item>

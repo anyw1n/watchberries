@@ -92,6 +92,17 @@ class ProductDetailViewModel @Inject constructor(
         }
     }
 
+    fun removeProduct() = viewModelScope.launch {
+        try {
+            productFlow.value?.let {
+                productRepository.deleteSku(it.sku)
+                eventChannel.send(Event.ProductDeleted)
+            } ?: throw WbException.ProductNotFound
+        } catch (exception: WbException) {
+            eventChannel.send(Event.ShowException(exception))
+        }
+    }
+
     data class UiStates(
         val productState: UiState,
         val pricesState: UiState
@@ -103,7 +114,10 @@ class ProductDetailViewModel @Inject constructor(
 
     sealed class Event {
 
+        object ProductDeleted : Event()
+
         data class ShowToast(@StringRes val textRes: Int) : Event()
+
         data class ShowException(val exception: WbException) : Event()
     }
 }
