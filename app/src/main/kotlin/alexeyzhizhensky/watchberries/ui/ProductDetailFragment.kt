@@ -117,10 +117,7 @@ class ProductDetailFragment : Fragment() {
         legend.isEnabled = false
         isDoubleTapToZoomEnabled = false
 
-        val marker = ChartMarkerView(context).also {
-            it.chartView = this
-        }
-        setMarker(marker)
+        marker = ChartMarkerView(context, this)
     }
 
     private fun subscribeToFlows() = viewLifecycleOwner.lifecycleScope.apply {
