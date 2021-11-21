@@ -4,16 +4,16 @@ import android.content.Context
 import android.net.ConnectivityManager
 import android.net.Network
 import android.net.NetworkCapabilities
+import android.net.NetworkCapabilities.NET_CAPABILITY_INTERNET
 import android.os.Build
 import androidx.annotation.RequiresApi
 
 @RequiresApi(Build.VERSION_CODES.N)
 class WbConnectivityManagerDefault(context: Context) : WbConnectivityManager(context) {
 
-    override fun getConnectStatus(): Boolean? {
-        val network = connectivityManager?.activeNetwork
-        return connectivityManager?.getNetworkCapabilities(network)
-            ?.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
+    override fun getConnectStatus(): Boolean? = connectivityManager?.let {
+        val network = it.activeNetwork ?: return false
+        it.getNetworkCapabilities(network)?.hasCapability(NET_CAPABILITY_INTERNET)
     }
 
     override fun subscribe() {
@@ -30,9 +30,7 @@ class WbConnectivityManagerDefault(context: Context) : WbConnectivityManager(con
             network: Network,
             networkCapabilities: NetworkCapabilities
         ) {
-            _networkAvailability.tryEmit(
-                networkCapabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
-            )
+            _networkAvailability.tryEmit(networkCapabilities.hasCapability(NET_CAPABILITY_INTERNET))
         }
 
         override fun onLost(network: Network) {

@@ -11,7 +11,6 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -32,9 +31,8 @@ class ProductListViewModel @Inject constructor(
         viewModelScope.apply {
             launch {
                 connectivityManager.networkAvailability
-                    .filterNotNull()
-                    .collectLatest {
-                        val event = if (it) {
+                    .collectLatest { connected ->
+                        val event = if (connected) {
                             Event.RefreshProducts
                         } else {
                             Event.ShowToast(R.string.network_connection_lost)

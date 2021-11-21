@@ -19,7 +19,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -48,9 +47,8 @@ class ProductDetailViewModel @Inject constructor(
         viewModelScope.apply {
             launch {
                 connectivityManager.networkAvailability
-                    .filterNotNull()
-                    .collectLatest {
-                        if (!it) {
+                    .collectLatest { connected ->
+                        if (!connected) {
                             eventChannel.send(Event.ShowToast(R.string.network_connection_lost))
                         }
                     }
