@@ -6,6 +6,7 @@ import android.text.format.DateUtils
 import android.widget.Toast
 import androidx.annotation.StringRes
 import androidx.paging.PagingState
+import com.github.mikephil.charting.charts.LineChart
 import com.google.android.gms.tasks.Task
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonDeserializer
@@ -22,7 +23,7 @@ import java.io.IOException
 import java.net.ConnectException
 import java.net.HttpURLConnection
 import java.time.LocalDateTime
-import java.time.ZoneId
+import java.time.ZoneOffset
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 
@@ -40,10 +41,6 @@ suspend fun <T> Task<T>.suspend(): T = suspendCancellableCoroutine { continuatio
 
 fun <Key : Any, Value : Any> PagingState<Key, Value>.anchorItemOrNull() = anchorPosition?.let {
     closestItemToPosition(it)
-}
-
-fun LocalDateTime.toMillisWithOffset() = atZone(ZoneId.systemDefault()).let {
-    (it.toEpochSecond() + it.offset.totalSeconds) * DateUtils.SECOND_IN_MILLIS
 }
 
 inline fun <reified T> GsonBuilder.registerDeserializer(
@@ -103,8 +100,18 @@ fun HttpException.toWbException() = when (code()) {
 fun getRelativeDateTime(context: Context, localDateTime: LocalDateTime): CharSequence =
     DateUtils.getRelativeDateTimeString(
         context,
-        localDateTime.toMillisWithOffset(),
+        localDateTime.toEpochSecond(ZoneOffset.UTC) * DateUtils.SECOND_IN_MILLIS,
         DateUtils.MINUTE_IN_MILLIS,
         DateUtils.WEEK_IN_MILLIS,
         DateUtils.FORMAT_ABBREV_RELATIVE
     )
+
+fun LineChart.setYAxisMinimum(min: Float) {
+    axisLeft.axisMinimum = min
+    axisRight.axisMinimum = min
+}
+
+fun LineChart.resetYAxisMinimum() {
+    axisLeft.resetAxisMinimum()
+    axisRight.resetAxisMinimum()
+}

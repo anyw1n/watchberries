@@ -5,11 +5,11 @@ import alexeyzhizhensky.watchberries.data.Price
 import alexeyzhizhensky.watchberries.data.room.Product
 import alexeyzhizhensky.watchberries.databinding.FragmentProductDetailBinding
 import alexeyzhizhensky.watchberries.utils.getRelativeDateTime
-import alexeyzhizhensky.watchberries.utils.toMillisWithOffset
+import alexeyzhizhensky.watchberries.utils.resetYAxisMinimum
+import alexeyzhizhensky.watchberries.utils.setYAxisMinimum
 import alexeyzhizhensky.watchberries.utils.toast
 import alexeyzhizhensky.watchberries.viewmodels.ProductDetailViewModel
 import android.os.Bundle
-import android.text.format.DateUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -37,7 +37,7 @@ import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.launch
 import java.time.LocalDateTime
 import java.time.ZoneOffset
-import java.time.temporal.ChronoUnit
+import java.time.format.DateTimeFormatter
 
 @AndroidEntryPoint
 class ProductDetailFragment : Fragment() {
@@ -53,15 +53,12 @@ class ProductDetailFragment : Fragment() {
 
     private val xAxisValueFormatter = object : ValueFormatter() {
 
-        override fun getAxisLabel(value: Float, axis: AxisBase?): String {
-            val dateTime = LocalDateTime.ofEpochSecond(value.toLong(), 0, ZoneOffset.UTC)
-            return context?.let {
-                DateUtils.formatDateTime(
-                    it,
-                    dateTime.truncatedTo(ChronoUnit.DAYS).toMillisWithOffset(),
-                    DateUtils.FORMAT_ABBREV_MONTH
-                )
-            } ?: ""
+        private val formatter = DateTimeFormatter.ofPattern(CHART_X_AXIS_LABEL_FORMAT)
+
+        override fun getAxisLabel(value: Float, axis: AxisBase?): String = context?.let {
+            LocalDateTime.ofEpochSecond(value.toLong(), 0, ZoneOffset.UTC).format(formatter)
+        } ?: ""
+    }
         }
     }
 
@@ -113,10 +110,10 @@ class ProductDetailFragment : Fragment() {
         xAxis.apply {
             position = XAxis.XAxisPosition.BOTTOM
             valueFormatter = xAxisValueFormatter
-            granularity = CHART_GRANULARITY
+            granularity = CHART_X_AXIS_GRANULARITY
+            spaceMin = CHART_X_AXIS_SPACE
+            spaceMax = CHART_X_AXIS_SPACE
         }
-        axisLeft.axisMinimum = CHART_Y_AXIS_MIN
-        axisRight.axisMinimum = CHART_Y_AXIS_MIN
         legend.isEnabled = false
         isDoubleTapToZoomEnabled = false
 
@@ -173,18 +170,18 @@ class ProductDetailFragment : Fragment() {
     }
 
     private fun FragmentProductDetailBinding.bindPrices(prices: List<Price>) {
-        val allPrices =
-            prices.plus(Price(LocalDateTime.now(), prices.lastOrNull()?.value ?: 0))
-        val graphValues = allPrices
+        if (prices.isEmpty()) return
+        val graphValues = prices
+            .plus(Price(LocalDateTime.now(ZoneOffset.UTC), prices.last().value))
+            .dropWhile { it.value == 0 }
             .map { Entry(it.datetime.toEpochSecond(ZoneOffset.UTC).toFloat(), it.value.toFloat()) }
         pricesDataSet.values = graphValues
         pricesLineChart.apply {
             data = LineData(pricesDataSet)
-            xAxis.apply {
-                axisMinimum = allPrices.first().datetime
-                    .truncatedTo(ChronoUnit.DAYS).toEpochSecond(ZoneOffset.UTC).toFloat()
-                axisMaximum = allPrices.last().datetime.plusDays(1)
-                    .truncatedTo(ChronoUnit.DAYS).toEpochSecond(ZoneOffset.UTC).toFloat()
+            if (graphValues.minOf { it.y } == CHART_Y_AXIS_MIN) {
+                setYAxisMinimum(CHART_Y_AXIS_MIN)
+            } else {
+                resetYAxisMinimum()
             }
             animateY(CHART_ANIMATION_DURATION)
         }
@@ -210,8 +207,12 @@ class ProductDetailFragment : Fragment() {
     private companion object {
 
         const val CHART_DATA_SET_LABEL = "Prices"
-        const val CHART_GRANULARITY = 1F * 24 * 60 * 60
         const val CHART_Y_AXIS_MIN = 0F
         const val CHART_ANIMATION_DURATION = 1000
+        private const val HOUR_IN_SECONDS = 60 * 60
+
+        private const val CHART_X_AXIS_LABEL_FORMAT = "LLL d"
+        private const val CHART_X_AXIS_GRANULARITY = 12F * HOUR_IN_SECONDS
+        private const val CHART_X_AXIS_SPACE = 24F * HOUR_IN_SECONDS
     }
 }

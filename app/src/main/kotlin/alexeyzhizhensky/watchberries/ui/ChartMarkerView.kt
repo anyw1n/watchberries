@@ -17,15 +17,15 @@ class ChartMarkerView(context: Context) : MarkerView(context, R.layout.view_char
     private val dateTimeTextView: TextView = findViewById(R.id.markerDateTimeTextView)
     private val priceTextView: TextView = findViewById(R.id.markerPriceTextView)
 
-    private val dateTimeFormatter = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT)
-        .withZone(ZoneId.systemDefault())
+    private val formatter = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT)
 
     override fun refreshContent(e: Entry?, highlight: Highlight?) {
         e?.let {
             val dateTime = LocalDateTime.ofEpochSecond(it.x.toLong(), 0, ZoneOffset.UTC)
+                .atZone(ZoneOffset.UTC).withZoneSameInstant(ZoneId.systemDefault())
             val price = it.y.toInt()
 
-            dateTimeTextView.text = dateTime.format(dateTimeFormatter)
+            dateTimeTextView.text = dateTime.format(formatter)
             priceTextView.text = if (price == 0) {
                 context.getString(R.string.not_available)
             } else {
