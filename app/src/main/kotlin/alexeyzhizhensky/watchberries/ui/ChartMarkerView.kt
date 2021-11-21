@@ -27,7 +27,7 @@ class ChartMarkerView(context: Context) : MarkerView(context, R.layout.view_char
 
             dateTimeTextView.text = dateTime.format(formatter)
             priceTextView.text = if (price == 0) {
-                context.getString(R.string.not_available)
+                context.getString(R.string.not_available_long)
             } else {
                 context.getString(R.string.price, price)
             }

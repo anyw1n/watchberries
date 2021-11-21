@@ -51,7 +51,7 @@ class ProductViewHolder(
         timeTextView.text = context.getString(R.string.last_update, relativeDateTime)
 
         priceTextView.text = if (product.lastPrice.value == 0) {
-            context.getString(R.string.not_available)
+            context.getString(R.string.not_available_short)
         } else {
             context.getString(R.string.price, product.lastPrice.value)
         }

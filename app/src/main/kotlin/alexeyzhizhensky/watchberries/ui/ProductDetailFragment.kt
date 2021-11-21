@@ -156,7 +156,7 @@ class ProductDetailFragment : Fragment() {
         }
 
         detailPriceTextView.text = if (product.lastPrice.value == 0) {
-            getString(R.string.not_available)
+            getString(R.string.not_available_long)
         } else {
             getString(R.string.price, product.lastPrice.value)
         }
