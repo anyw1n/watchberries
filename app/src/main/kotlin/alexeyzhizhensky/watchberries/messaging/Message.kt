@@ -5,9 +5,10 @@ import androidx.annotation.StringRes
 
 data class Message(
     val type: Type,
-    val productTitle: String,
-    val productPrice: String,
-    val productPriceDiff: String?,
+    val sku: Int,
+    val title: String,
+    val price: String,
+    val priceDiff: String?,
     val imageUrl: String
 ) {
 
@@ -23,6 +24,7 @@ data class Message(
     companion object {
 
         private const val TYPE_KEY = "TYPE"
+        private const val SKU_KEY = "SKU"
         private const val TITLE_KEY = "TITLE"
         private const val PRICE_KEY = "PRICE"
         private const val DIFF_KEY = "DIFF"
@@ -31,9 +33,10 @@ data class Message(
         fun fromData(data: Map<String, String>): Message? = runCatching {
             Message(
                 type = Type.valueOf(data[TYPE_KEY]!!),
-                productTitle = data[TITLE_KEY]!!,
-                productPrice = data[PRICE_KEY]!!,
-                productPriceDiff = data[DIFF_KEY],
+                sku = data[SKU_KEY]!!.toInt(),
+                title = data[TITLE_KEY]!!,
+                price = data[PRICE_KEY]!!,
+                priceDiff = data[DIFF_KEY],
                 imageUrl = data[IMAGE_URL_KEY]!!
             )
         }.getOrNull()

@@ -1,14 +1,13 @@
 package alexeyzhizhensky.watchberries.messaging
 
-import alexeyzhizhensky.watchberries.MainActivity
+import alexeyzhizhensky.watchberries.R
 import alexeyzhizhensky.watchberries.WbNotificationManager
 import alexeyzhizhensky.watchberries.data.UserRepository
 import android.app.ActivityManager
-import android.app.PendingIntent
-import android.content.Intent
 import android.graphics.Bitmap
-import android.os.Build
 import androidx.core.graphics.drawable.toBitmap
+import androidx.core.os.bundleOf
+import androidx.navigation.NavDeepLinkBuilder
 import coil.ImageLoader
 import coil.request.ImageRequest
 import com.google.firebase.messaging.FirebaseMessagingService
@@ -32,16 +31,10 @@ class MessagingService : FirebaseMessagingService() {
     private val serviceJob = SupervisorJob()
     private val serviceScope = CoroutineScope(Dispatchers.Main + serviceJob)
 
-    private val pendingIntent by lazy {
-        val activityIntent = Intent(this, MainActivity::class.java).apply {
-            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-        }
-        val flags = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            PendingIntent.FLAG_IMMUTABLE
-        } else {
-            0
-        }
-        PendingIntent.getActivity(this, 0, activityIntent, flags)
+    private val navDeepLinkBuilder by lazy {
+        NavDeepLinkBuilder(this@MessagingService)
+            .setGraph(R.navigation.nav_graph)
+            .setDestination(R.id.productDetailFragment)
     }
 
     private val imageLoader by lazy { ImageLoader.invoke(this) }
@@ -61,10 +54,14 @@ class MessagingService : FirebaseMessagingService() {
 
             val text = getString(
                 message.type.textResId,
-                message.productTitle,
-                message.productPrice,
-                message.productPriceDiff
+                message.title,
+                message.price,
+                message.priceDiff
             )
+
+            val pendingIntent = navDeepLinkBuilder
+                .setArguments(bundleOf("sku" to message.sku))
+                .createPendingIntent()
 
             notificationManager.buildNotificationAndPost(
                 title = getString(message.type.titleResId),
