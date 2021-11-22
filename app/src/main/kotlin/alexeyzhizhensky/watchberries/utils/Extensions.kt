@@ -13,8 +13,10 @@ import com.google.gson.JsonDeserializer
 import com.google.gson.JsonElement
 import com.google.gson.JsonPrimitive
 import com.google.gson.JsonSerializer
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.suspendCancellableCoroutine
+import kotlinx.coroutines.withContext
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.HttpException
@@ -72,21 +74,23 @@ suspend fun <T : Any> Call<T>.suspend(): T {
     return response.body() ?: throw WbException.Server.Response
 }
 
-suspend fun <T : Any> Call<T>.suspendResponse(): Response<T> = suspendCancellableCoroutine {
-    it.invokeOnCancellation { cancel() }
-    enqueue(object : Callback<T> {
-        override fun onResponse(call: Call<T>, response: Response<T>) {
-            it.resume(response)
-        }
-
-        override fun onFailure(call: Call<T>, t: Throwable) {
-            val wbException = when (t) {
-                is ConnectException -> WbException.InternetConnection(t)
-                else -> WbException.Unknown(t)
+suspend fun <T : Any> Call<T>.suspendResponse(): Response<T> = withContext(Dispatchers.IO) {
+    suspendCancellableCoroutine {
+        it.invokeOnCancellation { cancel() }
+        enqueue(object : Callback<T> {
+            override fun onResponse(call: Call<T>, response: Response<T>) {
+                it.resume(response)
             }
-            it.resumeWithException(wbException)
-        }
-    })
+
+            override fun onFailure(call: Call<T>, t: Throwable) {
+                val wbException = when (t) {
+                    is ConnectException -> WbException.InternetConnection(t)
+                    else -> WbException.Unknown(t)
+                }
+                it.resumeWithException(wbException)
+            }
+        })
+    }
 }
 
 fun HttpException.toWbException() = when (code()) {
