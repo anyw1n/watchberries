@@ -12,10 +12,14 @@ class MainActivity : AppCompatActivity() {
     @Inject
     lateinit var connectivityManager: WbConnectivityManager
 
+    @Inject
+    lateinit var notificationManager: WbNotificationManager
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         connectivityManager.subscribe()
+        notificationManager.clearNotifications()
     }
 
     override fun onDestroy() {

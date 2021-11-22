@@ -1,5 +1,6 @@
 package alexeyzhizhensky.watchberries
 
+import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
@@ -21,6 +22,14 @@ class WbNotificationManager @Inject constructor(
 
     private val notificationManager = NotificationManagerCompat.from(context)
 
+    private val notificationBuilder = NotificationCompat.Builder(context, CHANNEL_ID)
+        .setSmallIcon(R.drawable.ic_notification_icon)
+        .setColor(ContextCompat.getColor(context, R.color.primary))
+        .setColorized(true)
+        .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+        .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
+        .setAutoCancel(true)
+
     init {
         createChannel()
     }
@@ -33,6 +42,7 @@ class WbNotificationManager @Inject constructor(
         val importance = NotificationManager.IMPORTANCE_DEFAULT
         val channel = NotificationChannel(CHANNEL_ID, name, importance).apply {
             this.description = description
+            lockscreenVisibility = Notification.VISIBILITY_PUBLIC
         }
         notificationManager.createNotificationChannel(channel)
     }
@@ -43,22 +53,25 @@ class WbNotificationManager @Inject constructor(
         pendingIntent: PendingIntent,
         largeIcon: Bitmap?
     ) {
-        val bigPictureStyle = NotificationCompat.BigPictureStyle()
-            .bigPicture(largeIcon)
-            .bigLargeIcon(null)
-        val notification = NotificationCompat.Builder(context, CHANNEL_ID)
-            .setSmallIcon(R.drawable.ic_notification_icon)
-            .setColor(ContextCompat.getColor(context, R.color.primary))
-            .setColorized(true)
+        val bigPictureStyle = if (largeIcon != null) {
+            NotificationCompat.BigPictureStyle()
+                .bigPicture(largeIcon)
+                .bigLargeIcon(null)
+        } else {
+            null
+        }
+        val notification = notificationBuilder
             .setContentTitle(title)
             .setContentText(text)
             .setLargeIcon(largeIcon)
-            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
             .setStyle(bigPictureStyle)
             .setContentIntent(pendingIntent)
-            .setAutoCancel(true)
             .build()
         notificationManager.notify(Random.nextInt(), notification)
+    }
+
+    fun clearNotifications() {
+        notificationManager.cancelAll()
     }
 
     private companion object {
