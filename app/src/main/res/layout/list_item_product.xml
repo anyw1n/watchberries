@@ -64,7 +64,7 @@
             tools:text="SKU" />
 
         <TextView
-            android:id="@+id/timeTextView"
+            android:id="@+id/dateTimeTextView"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/default_margin"

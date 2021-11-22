@@ -57,9 +57,8 @@ class ProductDetailFragment : Fragment() {
 
         private val formatter = DateTimeFormatter.ofPattern(CHART_X_AXIS_LABEL_FORMAT)
 
-        override fun getAxisLabel(value: Float, axis: AxisBase?): String = context?.let {
+        override fun getAxisLabel(value: Float, axis: AxisBase?): String =
             LocalDateTime.ofEpochSecond(value.toLong(), 0, ZoneOffset.UTC).format(formatter)
-        } ?: ""
     }
 
     private var refreshSwiped = false
@@ -117,7 +116,7 @@ class ProductDetailFragment : Fragment() {
         }
 
         openLinkButton.setOnClickListener {
-            context?.let { viewModel.openProductPage(it) }
+            context?.let(viewModel::openProductPage)
         }
 
         pricesLineChart.setup()
@@ -160,13 +159,13 @@ class ProductDetailFragment : Fragment() {
                 }
 
                 launch {
-                    viewModel.uiStateFlow.collectLatest(this@ProductDetailFragment::setUiState)
+                    viewModel.uiStateFlow.collectLatest(::setUiState)
                 }
             }
         }
 
         launch {
-            viewModel.eventsFlow.collectLatest(this@ProductDetailFragment::handleEvent)
+            viewModel.eventsFlow.collectLatest(::handleEvent)
         }
     }
 
@@ -196,10 +195,12 @@ class ProductDetailFragment : Fragment() {
 
     private fun FragmentProductDetailBinding.bindPrices(prices: List<Price>) {
         if (prices.isEmpty()) return
+
         val graphValues = prices
             .plus(Price(LocalDateTime.now(ZoneOffset.UTC), prices.last().value))
             .dropWhile { it.value == 0 }
             .map { Entry(it.datetime.toEpochSecond(ZoneOffset.UTC).toFloat(), it.value.toFloat()) }
+
         pricesDataSet.values = graphValues
         pricesLineChart.apply {
             data = LineData(pricesDataSet)

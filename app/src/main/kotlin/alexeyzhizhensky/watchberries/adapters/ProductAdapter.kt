@@ -28,7 +28,7 @@ class ProductAdapter @Inject constructor(
     }
 
     override fun onBindViewHolder(holder: ProductViewHolder, position: Int) {
-        getItem(position)?.let { holder.bind(it) }
+        getItem(position)?.let(holder::bind)
     }
 
     private companion object {

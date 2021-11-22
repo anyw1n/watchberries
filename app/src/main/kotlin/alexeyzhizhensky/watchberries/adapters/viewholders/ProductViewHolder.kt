@@ -21,7 +21,9 @@ class ProductViewHolder(
     private var sku: Int? = null
 
     init {
-        binding.root.setOnClickListener { sku?.let { onItemClick?.invoke(it) } }
+        binding.root.setOnClickListener {
+            sku?.let { onItemClick?.invoke(it) }
+        }
     }
 
     fun bind(product: Product) {
@@ -41,7 +43,7 @@ class ProductViewHolder(
         skuTextView.text = product.sku.toString()
 
         val relativeDateTime = getRelativeDateTime(context, product.lastPrice.datetime)
-        timeTextView.text = context.getString(R.string.last_update, relativeDateTime)
+        dateTimeTextView.text = context.getString(R.string.last_update, relativeDateTime)
 
         priceTextView.text = if (product.lastPrice.value == 0) {
             context.getString(R.string.not_available_short)

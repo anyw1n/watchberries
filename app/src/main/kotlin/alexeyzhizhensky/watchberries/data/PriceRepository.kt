@@ -19,10 +19,9 @@ class PriceRepository @Inject constructor(
 ) {
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    fun getPricesFlow(sku: Int) = priceDao.getBySku(sku)
-        .mapLatest { list ->
-            list.map { it.price }
-        }
+    fun getPricesFlow(sku: Int) = priceDao.getBySku(sku).mapLatest { list ->
+        list.map { it.price }
+    }
 
     suspend fun updatePrices(sku: Int) {
         val prices = service.getPrices(sku).suspend()

@@ -4,7 +4,7 @@ import android.content.Context
 import com.google.gson.Gson
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -17,11 +17,12 @@ class SharedPrefsRepository @Inject constructor(
 
     private val gson = Gson()
 
-    private val _sort = MutableStateFlow(
+    private val _sort = MutableStateFlow(getSort())
+    val sort = _sort.asStateFlow()
+
+    private fun getSort() =
         sharedPrefs.getString(SORT_KEY, null)?.let { gson.fromJson(it, Sort::class.java) }
-            ?: Sort.DEFAULT.also { saveSort(it) }
-    )
-    val sort: StateFlow<Sort> = _sort
+            ?: Sort.DEFAULT.also(::saveSort)
 
     fun setSort(new: Sort) {
         _sort.tryEmit(new)

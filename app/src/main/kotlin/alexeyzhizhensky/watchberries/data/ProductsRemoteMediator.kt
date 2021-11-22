@@ -76,9 +76,7 @@ class ProductsRemoteMediator @Inject constructor(
             LoadType.APPEND -> state.lastItemOrNull()
         }?.sku ?: return null
 
-        return db.withTransaction {
-            productRemoteKeyDao.getBySku(sku)
-        }
+        return productRemoteKeyDao.getBySku(sku)
     }
 
     private suspend fun refresh(user: User, page: Int, limit: Int): Page {
@@ -86,9 +84,7 @@ class ProductsRemoteMediator @Inject constructor(
             if (page != initialPage) {
                 add(fetchPage(user, LoadType.REFRESH, page.dec(), limit))
             }
-            val currentPage = fetchPage(user, LoadType.APPEND, page, limit).also {
-                add(it)
-            }
+            val currentPage = fetchPage(user, LoadType.APPEND, page, limit).also(::add)
             if (!currentPage.endOfPaginationReached) {
                 add(fetchPage(user, LoadType.REFRESH, page.inc(), limit))
             }
@@ -103,7 +99,7 @@ class ProductsRemoteMediator @Inject constructor(
 
         if (!response.isSuccessful) throw HttpException(response).toWbException()
 
-        val pages = response.headers()["Pagination-Pages"]?.toIntOrNull()
+        val pages = response.headers()[PAGES_COUNT_HEADER]?.toIntOrNull()
         var products = response.body() ?: throw WbException.Server.Response
 
         val firstIndex = (page - initialPage) * limit
@@ -132,4 +128,9 @@ class ProductsRemoteMediator @Inject constructor(
         val remoteKeys: List<ProductRemoteKey>,
         val endOfPaginationReached: Boolean
     )
+
+    private companion object {
+
+        const val PAGES_COUNT_HEADER = "Pagination-Pages"
+    }
 }

@@ -32,7 +32,7 @@ class MessagingService : FirebaseMessagingService() {
     private val serviceScope = CoroutineScope(Dispatchers.Main + serviceJob)
 
     private val navDeepLinkBuilder by lazy {
-        NavDeepLinkBuilder(this@MessagingService)
+        NavDeepLinkBuilder(this)
             .setGraph(R.navigation.nav_graph)
             .setDestination(R.id.productDetailFragment)
     }
@@ -40,7 +40,7 @@ class MessagingService : FirebaseMessagingService() {
     private val imageLoader by lazy { ImageLoader.invoke(this) }
 
     override fun onNewToken(token: String) {
-        serviceScope.launch(Dispatchers.IO) {
+        serviceScope.launch {
             runCatching {
                 userRepository.updateToken(token)
             }
@@ -84,9 +84,7 @@ class MessagingService : FirebaseMessagingService() {
     }
 
     private suspend fun loadImage(url: String): Bitmap? {
-        val request = ImageRequest.Builder(this)
-            .data(url)
-            .build()
+        val request = ImageRequest.Builder(this).data(url).build()
         return imageLoader.execute(request).drawable?.toBitmap()
     }
 }

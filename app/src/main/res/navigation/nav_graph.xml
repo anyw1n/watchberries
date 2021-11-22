@@ -31,15 +31,15 @@
     <dialog
         android:id="@+id/deleteProductDialogFragment"
         android:name="alexeyzhizhensky.watchberries.ui.DeleteProductDialogFragment"
-        android:label="DeleteProductDialogFragment"/>
+        android:label="DeleteProductDialogFragment" />
     <dialog
         android:id="@+id/sortBottomSheetDialogFragment"
         android:name="alexeyzhizhensky.watchberries.ui.SortBottomSheetDialogFragment"
-        android:label="SortBottomSheetDialogFragment"/>
+        android:label="SortBottomSheetDialogFragment" />
     <fragment
         android:id="@+id/productDetailFragment"
         android:name="alexeyzhizhensky.watchberries.ui.ProductDetailFragment"
-        android:label="ProductDetailFragment" >
+        android:label="ProductDetailFragment">
         <argument
             android:name="sku"
             app:argType="integer" />

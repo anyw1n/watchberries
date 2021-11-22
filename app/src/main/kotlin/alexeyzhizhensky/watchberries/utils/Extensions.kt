@@ -29,7 +29,7 @@ import kotlin.coroutines.resumeWithException
 
 @OptIn(ExperimentalCoroutinesApi::class)
 suspend fun <T> Task<T>.suspend(): T = suspendCancellableCoroutine { continuation ->
-    addOnSuccessListener { continuation.resume(it) }
+    addOnSuccessListener(continuation::resume)
     addOnFailureListener {
         val exception = when (it) {
             is IOException -> WbException.InternetConnection(it)
@@ -39,9 +39,8 @@ suspend fun <T> Task<T>.suspend(): T = suspendCancellableCoroutine { continuatio
     }
 }
 
-fun <Key : Any, Value : Any> PagingState<Key, Value>.anchorItemOrNull() = anchorPosition?.let {
-    closestItemToPosition(it)
-}
+fun <Key : Any, Value : Any> PagingState<Key, Value>.anchorItemOrNull() =
+    anchorPosition?.let(::closestItemToPosition)
 
 inline fun <reified T> GsonBuilder.registerDeserializer(
     crossinline deserializer: (JsonElement) -> T

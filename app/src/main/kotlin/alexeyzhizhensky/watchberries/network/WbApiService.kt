@@ -1,8 +1,8 @@
 package alexeyzhizhensky.watchberries.network
 
 import alexeyzhizhensky.watchberries.data.Price
-import alexeyzhizhensky.watchberries.data.room.Product
 import alexeyzhizhensky.watchberries.data.Sort
+import alexeyzhizhensky.watchberries.data.room.Product
 import alexeyzhizhensky.watchberries.data.room.User
 import alexeyzhizhensky.watchberries.utils.registerDeserializer
 import alexeyzhizhensky.watchberries.utils.registerSerializer

@@ -12,6 +12,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
@@ -122,8 +123,8 @@ class ProductListFragment : Fragment() {
         recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 when {
-                    dy > 0 && fab.visibility == View.VISIBLE -> fab.hide()
-                    dy < 0 && fab.visibility != View.VISIBLE -> fab.show()
+                    dy > 0 && fab.isVisible -> fab.hide()
+                    dy < 0 && !fab.isVisible -> fab.show()
                 }
             }
         })
@@ -142,11 +143,11 @@ class ProductListFragment : Fragment() {
                 .flowWithLifecycle(viewLifecycleOwner.lifecycle)
                 .mapLatest { it.refresh }
                 .distinctUntilChanged()
-                .collectLatest(this@ProductListFragment::handleLoadState)
+                .collectLatest(::handleLoadState)
         }
 
         launch {
-            viewModel.eventsFlow.collectLatest(this@ProductListFragment::handleEvent)
+            viewModel.eventsFlow.collectLatest(::handleEvent)
         }
 
         launch {
