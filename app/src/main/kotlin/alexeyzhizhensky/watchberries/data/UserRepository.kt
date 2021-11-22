@@ -6,6 +6,8 @@ import alexeyzhizhensky.watchberries.network.TokenRequest
 import alexeyzhizhensky.watchberries.network.WbApiService
 import alexeyzhizhensky.watchberries.utils.suspend
 import com.google.firebase.messaging.FirebaseMessaging
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -15,9 +17,11 @@ class UserRepository @Inject constructor(
     private val service: WbApiService
 ) {
 
+    private val mutex = Mutex()
+
     private var user: User? = null
 
-    suspend fun getUser() = user ?: initUser()
+    suspend fun getUser() = mutex.withLock { user ?: initUser() }
 
     private suspend fun initUser(): User {
         val user = userDao.get() ?: createUser().also { userDao.insert(it) }
