@@ -57,6 +57,9 @@ interface WbApiService {
         @Query("sort") sort: Sort
     ): Call<List<Product>>
 
+    @GET("products/{sku}")
+    fun getProduct(@Path("sku") sku: Int): Call<Product>
+
     @GET("products/{sku}/prices")
     fun getPrices(@Path("sku") sku: Int): Call<List<Price>>
 

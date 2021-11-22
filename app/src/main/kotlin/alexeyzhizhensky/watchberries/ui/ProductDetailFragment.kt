@@ -15,7 +15,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
-import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.setFragmentResultListener
@@ -62,6 +61,8 @@ class ProductDetailFragment : Fragment() {
             LocalDateTime.ofEpochSecond(value.toLong(), 0, ZoneOffset.UTC).format(formatter)
         } ?: ""
     }
+
+    private var refreshSwiped = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -110,6 +111,11 @@ class ProductDetailFragment : Fragment() {
             setNavigationOnClickListener { findNavController().navigateUp() }
         }
 
+        detailSwipeRefresh.setOnRefreshListener {
+            refreshSwiped = true
+            viewModel.updateProduct()
+        }
+
         openLinkButton.setOnClickListener {
             context?.let { viewModel.openProductPage(it) }
         }
@@ -154,7 +160,7 @@ class ProductDetailFragment : Fragment() {
                 }
 
                 launch {
-                    viewModel.uiStatesFlow.collectLatest { binding.setUiStates(it) }
+                    viewModel.uiStateFlow.collectLatest(this@ProductDetailFragment::setUiState)
                 }
             }
         }
@@ -206,14 +212,13 @@ class ProductDetailFragment : Fragment() {
         }
     }
 
-    private fun FragmentProductDetailBinding.setUiStates(states: ProductDetailViewModel.UiStates) {
-        detailScrollView.isVisible =
-            states.productState == ProductDetailViewModel.UiState.NotLoading
-        detailProductAnimationView.isVisible =
-            states.productState == ProductDetailViewModel.UiState.Loading
-        pricesLineChart.isVisible = states.pricesState == ProductDetailViewModel.UiState.NotLoading
-        detailPricesAnimationView.isVisible =
-            states.pricesState == ProductDetailViewModel.UiState.Loading
+    private fun setUiState(state: ProductDetailViewModel.UiState) {
+        if (refreshSwiped && state == ProductDetailViewModel.UiState.Loading) {
+            refreshSwiped = false
+        } else {
+            binding.detailSwipeRefresh.isRefreshing =
+                state == ProductDetailViewModel.UiState.Loading
+        }
     }
 
     private fun handleEvent(event: ProductDetailViewModel.Event) {

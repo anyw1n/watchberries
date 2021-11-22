@@ -16,9 +16,10 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharedFlow
-import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -31,14 +32,13 @@ class ProductDetailViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val _productFlow = MutableStateFlow<Product?>(null)
-    val productFlow: StateFlow<Product?> = _productFlow
+    val productFlow = _productFlow.asStateFlow()
 
     private val _pricesFlow = MutableSharedFlow<List<Price>>()
-    val pricesFlow: SharedFlow<List<Price>> = _pricesFlow
+    val pricesFlow = _pricesFlow.asSharedFlow()
 
-    private val _uiStatesFlow: MutableStateFlow<UiStates> =
-        MutableStateFlow(UiStates(UiState.NotLoading, UiState.NotLoading))
-    val uiStatesFlow: StateFlow<UiStates> = _uiStatesFlow
+    private val _uiStateFlow = MutableStateFlow(UiState.NotLoading)
+    val uiStateFlow = _uiStateFlow.asStateFlow()
 
     private val eventChannel = Channel<Event>(Channel.BUFFERED)
     val eventsFlow = eventChannel.receiveAsFlow()
@@ -48,7 +48,9 @@ class ProductDetailViewModel @Inject constructor(
             launch {
                 connectivityManager.networkAvailability
                     .collectLatest { connected ->
-                        if (!connected) {
+                        if (connected) {
+                            productFlow.value?.sku?.let(this@ProductDetailViewModel::updateProduct)
+                        } else {
                             eventChannel.send(Event.ShowToast(R.string.network_connection_lost))
                         }
                     }
@@ -57,26 +59,33 @@ class ProductDetailViewModel @Inject constructor(
     }
 
     fun loadProduct(sku: Int) = viewModelScope.apply {
-        _uiStatesFlow.tryEmit(UiStates(UiState.Loading, UiState.Loading))
-
         launch {
-            val product = productRepository.getProduct(sku)
-            _productFlow.emit(product)
-            _uiStatesFlow.emit(uiStatesFlow.value.copy(productState = UiState.NotLoading))
+            _productFlow.emitAll(productRepository.getProductFlow(sku))
         }
 
         launch {
-            priceRepository.getPricesFlow(sku).collectLatest {
-                _pricesFlow.emit(it)
-                if (uiStatesFlow.value.pricesState == UiState.Loading) {
-                    _uiStatesFlow.emit(uiStatesFlow.value.copy(pricesState = UiState.NotLoading))
-                }
-            }
+            _pricesFlow.emitAll(priceRepository.getPricesFlow(sku))
         }
 
-        launch {
+        updateProduct(sku)
+    }
+
+    private fun updateProduct(sku: Int) = viewModelScope.launch {
+        _uiStateFlow.emit(UiState.Loading)
+        try {
+            productRepository.updateProduct(sku)
+            priceRepository.updatePrices(sku)
+        } catch (exception: WbException) {
+            eventChannel.send(Event.ShowException(exception))
+        }
+        _uiStateFlow.emit(UiState.NotLoading)
+    }
+
+    fun updateProduct() {
+        viewModelScope.launch {
             try {
-                priceRepository.updatePrices(sku)
+                productFlow.value?.sku?.let(this@ProductDetailViewModel::updateProduct)
+                    ?: throw WbException.ProductNotFound
             } catch (exception: WbException) {
                 eventChannel.send(Event.ShowException(exception))
             }
@@ -100,11 +109,6 @@ class ProductDetailViewModel @Inject constructor(
             eventChannel.send(Event.ShowException(exception))
         }
     }
-
-    data class UiStates(
-        val productState: UiState,
-        val pricesState: UiState
-    )
 
     enum class UiState {
         Loading, NotLoading
