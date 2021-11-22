@@ -18,6 +18,7 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.receiveAsFlow
@@ -49,7 +50,7 @@ class ProductDetailViewModel @Inject constructor(
                 connectivityManager.networkAvailability
                     .collectLatest { connected ->
                         if (connected) {
-                            productFlow.value?.sku?.let(this@ProductDetailViewModel::updateProduct)
+                            updateProductInfo()
                         } else {
                             eventChannel.send(Event.ShowToast(R.string.network_connection_lost))
                         }
@@ -59,37 +60,31 @@ class ProductDetailViewModel @Inject constructor(
     }
 
     fun loadProduct(sku: Int) = viewModelScope.apply {
+        _uiStateFlow.tryEmit(UiState.Loading)
+
         launch {
-            _productFlow.emitAll(productRepository.getProductFlow(sku))
+            productRepository.getProductFlow(sku).collect {
+                val lastValue = productFlow.value
+                _productFlow.emit(it)
+                if (lastValue == null) updateProductInfo()
+            }
         }
 
         launch {
             _pricesFlow.emitAll(priceRepository.getPricesFlow(sku))
         }
-
-        updateProduct(sku)
     }
 
-    private fun updateProduct(sku: Int) = viewModelScope.launch {
+    fun updateProductInfo() = viewModelScope.launch {
         _uiStateFlow.emit(UiState.Loading)
         try {
-            productRepository.updateProduct(sku)
-            priceRepository.updatePrices(sku)
+            val product = productFlow.value ?: throw WbException.ProductNotFound
+            productRepository.updateProduct(product)
+            priceRepository.updatePrices(product.sku)
         } catch (exception: WbException) {
             eventChannel.send(Event.ShowException(exception))
         }
         _uiStateFlow.emit(UiState.NotLoading)
-    }
-
-    fun updateProduct() {
-        viewModelScope.launch {
-            try {
-                productFlow.value?.sku?.let(this@ProductDetailViewModel::updateProduct)
-                    ?: throw WbException.ProductNotFound
-            } catch (exception: WbException) {
-                eventChannel.send(Event.ShowException(exception))
-            }
-        }
     }
 
     fun openProductPage(context: Context) = productFlow.value?.shopUri?.let {

@@ -112,7 +112,7 @@ class ProductDetailFragment : Fragment() {
 
         detailSwipeRefresh.setOnRefreshListener {
             refreshSwiped = true
-            viewModel.updateProduct()
+            viewModel.updateProductInfo()
         }
 
         openLinkButton.setOnClickListener {

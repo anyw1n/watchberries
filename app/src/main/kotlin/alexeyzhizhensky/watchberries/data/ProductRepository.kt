@@ -1,5 +1,6 @@
 package alexeyzhizhensky.watchberries.data
 
+import alexeyzhizhensky.watchberries.data.room.Product
 import alexeyzhizhensky.watchberries.data.room.ProductDao
 import alexeyzhizhensky.watchberries.network.SkuRequest
 import alexeyzhizhensky.watchberries.network.WbApiService
@@ -31,9 +32,10 @@ class ProductRepository @Inject constructor(
 
     fun getProductFlow(sku: Int) = productDao.getBySku(sku)
 
-    suspend fun updateProduct(sku: Int) {
-        val product = service.getProduct(sku).suspend()
-        productDao.insert(product)
+    suspend fun updateProduct(product: Product) {
+        service.getProduct(product.sku).suspend().apply {
+            productDao.update(copy(id = product.id))
+        }
     }
 
     suspend fun addSku(sku: Int) {
