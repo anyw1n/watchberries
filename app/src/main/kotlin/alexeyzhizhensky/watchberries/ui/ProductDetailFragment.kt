@@ -120,6 +120,10 @@ class ProductDetailFragment : Fragment() {
         }
 
         pricesLineChart.setup()
+
+        pricesSwitch.setOnCheckedChangeListener { _, _ ->
+            bindPrices(viewModel.pricesFlow.value)
+        }
     }
 
     private fun LineChart.setup() {
@@ -194,21 +198,20 @@ class ProductDetailFragment : Fragment() {
     }
 
     private fun FragmentProductDetailBinding.bindPrices(prices: List<Price>) {
-        if (prices.isEmpty()) return
+        var entries = prices.map {
+            Entry(it.datetime.toEpochSecond(ZoneOffset.UTC).toFloat(), it.value.toFloat())
+        }
 
-        val graphValues = prices
-            .plus(Price(LocalDateTime.now(ZoneOffset.UTC), prices.last().value))
-            .dropWhile { it.value == 0 }
-            .map { Entry(it.datetime.toEpochSecond(ZoneOffset.UTC).toFloat(), it.value.toFloat()) }
+        if (pricesSwitch.isChecked) {
+            pricesLineChart.setYAxisMinimum(CHART_Y_AXIS_MIN)
+        } else {
+            entries = entries.filter { it.y != 0F }
+            pricesLineChart.resetYAxisMinimum()
+        }
 
-        pricesDataSet.values = graphValues
+        pricesDataSet.values = entries
         pricesLineChart.apply {
             data = LineData(pricesDataSet)
-            if (graphValues.minOf { it.y } == CHART_Y_AXIS_MIN) {
-                setYAxisMinimum(CHART_Y_AXIS_MIN)
-            } else {
-                resetYAxisMinimum()
-            }
             animateY(CHART_ANIMATION_DURATION)
         }
     }

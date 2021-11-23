@@ -50,4 +50,5 @@
     <string name="notification_channel_description">Уведомления про появление на складе товара или снижение цены на него</string>
     <string name="internal_server_error">Внутренняя ошибка сервера</string>
     <string name="open_page">Открыть в приложении или браузере</string>
+    <string name="enable_n_a_values_on_chart">Включить значения Н/Н на графике</string>
 </resources>

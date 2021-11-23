@@ -51,4 +51,5 @@
     <string name="notification_channel_name">Product updates</string>
     <string name="notification_channel_description">Notifications about product price drops and availability</string>
     <string name="open_page">Open in app or browser</string>
+    <string name="enable_n_a_values_on_chart">Enable N/A values on chart</string>
 </resources>

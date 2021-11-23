@@ -14,9 +14,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.collectLatest
@@ -35,8 +33,8 @@ class ProductDetailViewModel @Inject constructor(
     private val _productFlow = MutableStateFlow<Product?>(null)
     val productFlow = _productFlow.asStateFlow()
 
-    private val _pricesFlow = MutableSharedFlow<List<Price>>()
-    val pricesFlow = _pricesFlow.asSharedFlow()
+    private val _pricesFlow = MutableStateFlow<List<Price>>(emptyList())
+    val pricesFlow = _pricesFlow.asStateFlow()
 
     private val _uiStateFlow = MutableStateFlow(UiState.NotLoading)
     val uiStateFlow = _uiStateFlow.asStateFlow()
