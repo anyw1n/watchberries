@@ -1,16 +1,95 @@
 <?xml version="1.0" encoding="utf-8"?>
 <animated-vector xmlns:android="http://schemas.android.com/apk/res/android"
-    android:drawable="@drawable/image_placeholder_vector">
+    xmlns:aapt="http://schemas.android.com/aapt">
 
-    <target
-        android:name="one"
-        android:animation="@animator/fillalpha_one" />
+    <aapt:attr name="android:drawable">
+        <vector
+            android:width="44dp"
+            android:height="16dp"
+            android:viewportWidth="44"
+            android:viewportHeight="16">
+            <path
+                android:name="first"
+                android:fillAlpha="0"
+                android:fillColor="?attr/colorOnBackground"
+                android:pathData="M8,8m-5,0a5,5 0,1 1,10 0a5,5 0,1 1,-10 0" />
+            <path
+                android:name="second"
+                android:fillAlpha="0"
+                android:fillColor="?attr/colorOnBackground"
+                android:pathData="M22,8m-5,0a5,5 0,1 1,10 0a5,5 0,1 1,-10 0" />
+            <path
+                android:name="third"
+                android:fillAlpha="0"
+                android:fillColor="?attr/colorOnBackground"
+                android:pathData="M37,8m-5,0a5,5 0,1 1,10 0a5,5 0,1 1,-10 0" />
+        </vector>
+    </aapt:attr>
 
-    <target
-        android:name="two"
-        android:animation="@animator/fillalpha_two" />
+    <target android:name="first">
+        <aapt:attr name="android:animation">
+            <set>
+                <objectAnimator
+                    android:duration="600"
+                    android:propertyName="fillAlpha"
+                    android:repeatCount="infinite"
+                    android:repeatMode="reverse"
+                    android:valueFrom="0"
+                    android:valueTo="1" />
+                <objectAnimator
+                    android:duration="600"
+                    android:propertyName="fillAlpha"
+                    android:repeatCount="infinite"
+                    android:repeatMode="reverse"
+                    android:valueFrom="1"
+                    android:valueTo="0" />
+            </set>
+        </aapt:attr>
+    </target>
 
-    <target
-        android:name="three"
-        android:animation="@animator/fillalpha_three" />
+    <target android:name="second">
+        <aapt:attr name="android:animation">
+            <set>
+                <objectAnimator
+                    android:duration="600"
+                    android:propertyName="fillAlpha"
+                    android:repeatCount="infinite"
+                    android:repeatMode="reverse"
+                    android:startOffset="200"
+                    android:valueFrom="0"
+                    android:valueTo="1" />
+                <objectAnimator
+                    android:duration="600"
+                    android:propertyName="fillAlpha"
+                    android:repeatCount="infinite"
+                    android:repeatMode="reverse"
+                    android:startOffset="200"
+                    android:valueFrom="1"
+                    android:valueTo="0" />
+            </set>
+        </aapt:attr>
+    </target>
+
+    <target android:name="third">
+        <aapt:attr name="android:animation">
+            <set>
+                <objectAnimator
+                    android:duration="600"
+                    android:propertyName="fillAlpha"
+                    android:repeatCount="infinite"
+                    android:repeatMode="reverse"
+                    android:startOffset="400"
+                    android:valueFrom="0"
+                    android:valueTo="1" />
+                <objectAnimator
+                    android:duration="600"
+                    android:propertyName="fillAlpha"
+                    android:repeatCount="infinite"
+                    android:repeatMode="reverse"
+                    android:startOffset="400"
+                    android:valueFrom="1"
+                    android:valueTo="0" />
+            </set>
+        </aapt:attr>
+    </target>
 </animated-vector>

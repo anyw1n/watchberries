@@ -21,10 +21,10 @@
             android:layout_height="160dp"
             android:layout_margin="@dimen/default_margin"
             android:contentDescription="@string/product_image"
-            android:scaleType="centerCrop"
+            android:scaleType="centerInside"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:srcCompat="@tools:sample/avatars" />
+            tools:srcCompat="@drawable/image_placeholder_animated_vector" />
 
         <TextView
             android:id="@+id/titleTextView"

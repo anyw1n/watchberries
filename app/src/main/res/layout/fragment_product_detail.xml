@@ -39,8 +39,8 @@
                     android:layout_gravity="center_horizontal"
                     android:layout_margin="@dimen/default_margin"
                     android:contentDescription="@string/product_image"
-                    android:scaleType="centerCrop"
-                    tools:src="@tools:sample/avatars" />
+                    android:scaleType="centerInside"
+                    tools:src="@drawable/image_placeholder_animated_vector" />
 
                 <androidx.cardview.widget.CardView
                     android:layout_width="match_parent"

@@ -25,6 +25,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import coil.load
+import coil.size.Scale
 import coil.transform.RoundedCornersTransformation
 import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.components.AxisBase
@@ -177,6 +178,7 @@ class ProductDetailFragment : Fragment() {
         detailAppBar.toolbar.title = product.title
 
         detailProductImageView.load(product.imageUrl) {
+            scale(Scale.FILL)
             val cornerRadius = resources.getDimension(R.dimen.corner_radius)
             transformations(RoundedCornersTransformation(cornerRadius))
             placeholder(R.drawable.image_placeholder_animated_vector)
