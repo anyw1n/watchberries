@@ -80,17 +80,29 @@ class ProductsRemoteMediator @Inject constructor(
     }
 
     private suspend fun refresh(user: User, page: Int, limit: Int): Page {
+        var endOfPaginationReached = true
+
         val pages = mutableListOf<Page>().apply {
             if (page != initialPage) {
-                add(fetchPage(user, LoadType.REFRESH, page.dec(), limit))
+                fetchPage(user, LoadType.PREPEND, page.dec(), limit).also {
+                    add(it)
+                    if (!it.endOfPaginationReached) endOfPaginationReached = false
+                }
             }
             val currentPage = fetchPage(user, LoadType.APPEND, page, limit).also(::add)
             if (!currentPage.endOfPaginationReached) {
-                add(fetchPage(user, LoadType.REFRESH, page.inc(), limit))
+                fetchPage(user, LoadType.APPEND, page.inc(), limit).also {
+                    add(it)
+                    if (!it.endOfPaginationReached) endOfPaginationReached = false
+                }
             }
         }
 
-        return Page(pages.flatMap { it.products }, pages.flatMap { it.remoteKeys }, false)
+        return Page(
+            pages.flatMap { it.products },
+            pages.flatMap { it.remoteKeys },
+            endOfPaginationReached
+        )
     }
 
     private suspend fun fetchPage(user: User, loadType: LoadType, page: Int, limit: Int): Page {
@@ -108,7 +120,7 @@ class ProductsRemoteMediator @Inject constructor(
         }
 
         val isFirstPage = page == initialPage
-        val isLastPage = if (pages != null) page == pages else products.size < limit
+        val isLastPage = if (pages != null) page >= pages else products.size < limit
 
         val prevPage = if (isFirstPage) null else page.dec()
         val nextPage = if (isLastPage) null else page.inc()
@@ -116,7 +128,7 @@ class ProductsRemoteMediator @Inject constructor(
 
         val endOfPaginationReached = when (loadType) {
             LoadType.PREPEND -> isFirstPage
-            LoadType.REFRESH -> false
+            LoadType.REFRESH -> products.size < limit
             LoadType.APPEND -> isLastPage
         }
 
