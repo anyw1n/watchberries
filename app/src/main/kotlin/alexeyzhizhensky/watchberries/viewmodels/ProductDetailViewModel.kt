@@ -13,13 +13,13 @@ import androidx.annotation.StringRes
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.emitAll
-import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -39,8 +39,8 @@ class ProductDetailViewModel @Inject constructor(
     private val _uiStateFlow = MutableStateFlow(UiState.NotLoading)
     val uiStateFlow = _uiStateFlow.asStateFlow()
 
-    private val eventChannel = Channel<Event>(Channel.BUFFERED)
-    val eventsFlow = eventChannel.receiveAsFlow()
+    private val _eventFlow = MutableSharedFlow<Event>()
+    val eventFlow = _eventFlow.asSharedFlow()
 
     init {
         viewModelScope.apply {
@@ -50,7 +50,7 @@ class ProductDetailViewModel @Inject constructor(
                         if (connected) {
                             updateProductInfo()
                         } else {
-                            eventChannel.send(Event.ShowToast(R.string.network_connection_lost))
+                            _eventFlow.emit(Event.ShowToast(R.string.network_connection_lost))
                         }
                     }
             }
@@ -80,7 +80,7 @@ class ProductDetailViewModel @Inject constructor(
             productRepository.updateProduct(product)
             priceRepository.updatePrices(product.sku)
         } catch (exception: WbException) {
-            eventChannel.send(Event.ShowException(exception))
+            _eventFlow.emit(Event.ShowException(exception))
         }
         _uiStateFlow.emit(UiState.NotLoading)
     }
@@ -96,10 +96,10 @@ class ProductDetailViewModel @Inject constructor(
         try {
             productFlow.value?.let {
                 productRepository.deleteSku(it.sku)
-                eventChannel.send(Event.ProductDeleted)
+                _eventFlow.emit(Event.ProductDeleted)
             } ?: throw WbException.ProductNotFound
         } catch (exception: WbException) {
-            eventChannel.send(Event.ShowException(exception))
+            _eventFlow.emit(Event.ShowException(exception))
         }
     }
 

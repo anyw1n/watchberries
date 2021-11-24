@@ -170,7 +170,7 @@ class ProductDetailFragment : Fragment() {
         }
 
         launch {
-            viewModel.eventsFlow.collectLatest(::handleEvent)
+            viewModel.eventFlow.collectLatest(::handleEvent)
         }
     }
 

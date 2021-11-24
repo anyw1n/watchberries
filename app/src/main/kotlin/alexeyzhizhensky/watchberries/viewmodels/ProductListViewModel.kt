@@ -9,9 +9,9 @@ import androidx.annotation.StringRes
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -22,8 +22,8 @@ class ProductListViewModel @Inject constructor(
     private val sharedPrefsRepository: SharedPrefsRepository
 ) : ViewModel() {
 
-    private val eventChannel = Channel<Event>(Channel.BUFFERED)
-    val eventsFlow = eventChannel.receiveAsFlow()
+    private val _eventFlow = MutableSharedFlow<Event>()
+    val eventFlow = _eventFlow.asSharedFlow()
 
     val pagingDataFlow = productRepository.observePaginated()
 
@@ -37,13 +37,13 @@ class ProductListViewModel @Inject constructor(
                         } else {
                             Event.ShowToast(R.string.network_connection_lost)
                         }
-                        eventChannel.send(event)
+                        _eventFlow.emit(event)
                     }
             }
 
             launch {
                 sharedPrefsRepository.sort.collectLatest {
-                    eventChannel.send(Event.RefreshProducts)
+                    _eventFlow.emit(Event.RefreshProducts)
                 }
             }
         }
@@ -52,9 +52,9 @@ class ProductListViewModel @Inject constructor(
     fun addProduct(sku: Int) = viewModelScope.launch {
         try {
             productRepository.addSku(sku)
-            eventChannel.send(Event.RefreshProducts)
+            _eventFlow.emit(Event.RefreshProducts)
         } catch (exception: WbException) {
-            eventChannel.send(Event.ShowException(exception))
+            _eventFlow.emit(Event.ShowException(exception))
         }
     }
 

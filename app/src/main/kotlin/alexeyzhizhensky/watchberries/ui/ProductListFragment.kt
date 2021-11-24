@@ -147,7 +147,7 @@ class ProductListFragment : Fragment() {
         }
 
         launch {
-            viewModel.eventsFlow.collectLatest(::handleEvent)
+            viewModel.eventFlow.collectLatest(::handleEvent)
         }
 
         launch {
