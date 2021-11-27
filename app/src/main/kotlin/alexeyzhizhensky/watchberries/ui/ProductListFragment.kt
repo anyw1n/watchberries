@@ -160,9 +160,8 @@ class ProductListFragment : Fragment() {
 
     private fun handleLoadState(loadState: LoadState) {
         if (loadState is LoadState.Error) {
-            context?.let {
-                val wbException = loadState.error as? WbException ?: return@let
-                it.toast(wbException.getMessage(it))
+            (loadState.error as? WbException)?.let { exception ->
+                context?.let { it.toast(exception.getMessage(it)) }
             }
         }
 

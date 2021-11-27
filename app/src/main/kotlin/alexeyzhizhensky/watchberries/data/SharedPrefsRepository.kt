@@ -30,8 +30,7 @@ class SharedPrefsRepository @Inject constructor(
         saveSort(new)
     }
 
-    private fun saveSort(sort: Sort) =
-        sharedPrefs.edit().putString(SORT_KEY, gson.toJson(sort)).apply()
+    private fun saveSort(sort: Sort) = sharedPrefs.edit { putString(SORT_KEY, gson.toJson(sort)) }
 
     fun getLocale() =
         sharedPrefs.getString(LOCALE_KEY, null)?.let { LocaleUtils.SupportedLocale.valueOf(it) }

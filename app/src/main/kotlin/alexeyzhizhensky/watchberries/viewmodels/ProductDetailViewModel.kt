@@ -104,9 +104,7 @@ class ProductDetailViewModel @Inject constructor(
     sealed class Event : BaseViewModel.Event {
 
         object ProductDeleted : Event()
-
         data class ShowToast(@StringRes val textRes: Int) : Event()
-
         data class ShowException(val exception: WbException) : Event()
     }
 }
