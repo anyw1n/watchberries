@@ -107,7 +107,6 @@ class ProductDetailFragment : Fragment() {
         }
 
         detailAppBar.toolbar.apply {
-            setNavigationIcon(R.drawable.ic_baseline_chevron_left_24)
             setNavigationOnClickListener { findNavController().navigateUp() }
         }
 

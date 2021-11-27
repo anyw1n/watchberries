@@ -80,7 +80,10 @@ class ProductListFragment : Fragment() {
     // Functions
 
     private fun FragmentProductListBinding.setup() {
-        include.toolbar.inflateMenu(R.menu.menu_product_list)
+        include.toolbar.apply {
+            navigationIcon = null
+            inflateMenu(R.menu.menu_product_list)
+        }
 
         recyclerView.apply {
             adapter = ConcatAdapter(
@@ -98,15 +101,15 @@ class ProductListFragment : Fragment() {
 
     private fun FragmentProductListBinding.setListeners() {
         include.toolbar.setOnMenuItemClickListener {
-            when (it.itemId) {
-                R.id.action_sort -> {
-                    val action = ProductListFragmentDirections
-                        .actionProductListFragmentToSortBottomSheetDialogFragment()
-                    findNavController().navigate(action)
-                    true
-                }
-                else -> false
+            val action = when (it.itemId) {
+                R.id.action_sort -> ProductListFragmentDirections
+                    .actionProductListFragmentToSortBottomSheetDialogFragment()
+                R.id.action_settings -> ProductListFragmentDirections
+                    .actionProductListFragmentToSettingsFragment()
+                else -> null
             }
+            action?.let(findNavController()::navigate)
+            true
         }
 
         swipeRefresh.setOnRefreshListener {

@@ -13,7 +13,9 @@
         <entry key="..\:/Projects/Kotlin/watchberries/app/src/main/res/layout/bottom_sheet_sort.xml" value="0.4" />
         <entry key="..\:/Projects/Kotlin/watchberries/app/src/main/res/layout/dialog_add_product.xml" value="0.25416666666666665" />
         <entry key="..\:/Projects/Kotlin/watchberries/app/src/main/res/layout/fragment_product_detail.xml" value="0.4" />
-        <entry key="..\:/Projects/Kotlin/watchberries/app/src/main/res/layout/fragment_product_list.xml" value="0.25416666666666665" />
+        <entry key="..\:/Projects/Kotlin/watchberries/app/src/main/res/layout/fragment_product_list.xml" value="0.4" />
+        <entry key="..\:/Projects/Kotlin/watchberries/app/src/main/res/layout/fragment_settings.xml" value="0.4" />
+        <entry key="..\:/Projects/Kotlin/watchberries/app/src/main/res/layout/item_settings.xml" value="0.4" />
         <entry key="..\:/Projects/Kotlin/watchberries/app/src/main/res/layout/list_item_load_state.xml" value="0.4" />
         <entry key="..\:/Projects/Kotlin/watchberries/app/src/main/res/layout/list_item_product.xml" value="0.25416666666666665" />
         <entry key="..\:/Projects/Kotlin/watchberries/app/src/main/res/layout/list_item_top.xml" value="0.25416666666666665" />

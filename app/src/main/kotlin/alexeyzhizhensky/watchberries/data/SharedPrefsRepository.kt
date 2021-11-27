@@ -1,6 +1,7 @@
 package alexeyzhizhensky.watchberries.data
 
 import android.content.Context
+import androidx.core.content.edit
 import com.google.gson.Gson
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -32,10 +33,26 @@ class SharedPrefsRepository @Inject constructor(
     private fun saveSort(sort: Sort) =
         sharedPrefs.edit().putString(SORT_KEY, gson.toJson(sort)).apply()
 
-    private companion object {
+    fun getLocale() =
+        sharedPrefs.getString(LOCALE_KEY, null)?.let { LocaleUtils.SupportedLocale.valueOf(it) }
+            ?: LocaleUtils.SupportedLocale.Default.also(::saveLocale)
 
-        const val SHARED_PREFS_NAME = "alexeyzhizhensky.watchberries.preferences"
+    fun saveLocale(locale: LocaleUtils.SupportedLocale) =
+        sharedPrefs.edit { putString(LOCALE_KEY, locale.name) }
 
-        const val SORT_KEY = "SORT"
+    companion object {
+
+        private const val SHARED_PREFS_NAME = "alexeyzhizhensky.watchberries.preferences"
+
+        private const val SORT_KEY = "SORT"
+        private const val LOCALE_KEY = "LOCALE"
+
+        fun getLocale(context: Context) =
+            with(context.getSharedPreferences(SHARED_PREFS_NAME, Context.MODE_PRIVATE)) {
+                getString(LOCALE_KEY, null)?.let { LocaleUtils.SupportedLocale.valueOf(it) }
+                    ?: LocaleUtils.SupportedLocale.Default.also {
+                        edit { putString(LOCALE_KEY, it.name) }
+                    }
+            }
     }
 }

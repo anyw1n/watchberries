@@ -51,4 +51,13 @@
     <string name="internal_server_error">Внутренняя ошибка сервера</string>
     <string name="open_page">Открыть в приложении или браузере</string>
     <string name="enable_n_a_values_on_chart">Включить значения Н/Н на графике</string>
+    <string name="settings">Настройки</string>
+    <string name="language">Язык</string>
+    <string name="language_pick_dialog_title">Выберите язык приложения</string>
+    <string-array name="language_items">
+        <item>По умолчанию</item>
+        <item>English</item>
+        <item>Русский</item>
+    </string-array>
+    <string name="message_restart_app">Пожалуйста, перезапустите приложение для применения изменений</string>
 </resources>

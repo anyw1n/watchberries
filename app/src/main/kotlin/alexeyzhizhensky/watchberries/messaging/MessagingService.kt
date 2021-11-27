@@ -2,8 +2,10 @@ package alexeyzhizhensky.watchberries.messaging
 
 import alexeyzhizhensky.watchberries.R
 import alexeyzhizhensky.watchberries.WbNotificationManager
+import alexeyzhizhensky.watchberries.data.LocaleUtils
 import alexeyzhizhensky.watchberries.data.UserRepository
 import android.app.ActivityManager
+import android.content.Context
 import android.graphics.Bitmap
 import androidx.core.graphics.drawable.toBitmap
 import androidx.core.os.bundleOf
@@ -86,5 +88,9 @@ class MessagingService : FirebaseMessagingService() {
     private suspend fun loadImage(url: String): Bitmap? {
         val request = ImageRequest.Builder(this).data(url).build()
         return imageLoader.execute(request).drawable?.toBitmap()
+    }
+
+    override fun attachBaseContext(newBase: Context?) {
+        super.attachBaseContext(newBase?.let { LocaleUtils.getLocalizedContext(it) })
     }
 }

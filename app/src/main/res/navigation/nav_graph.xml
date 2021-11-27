@@ -23,6 +23,13 @@
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right" />
+        <action
+            android:id="@+id/action_productListFragment_to_settingsFragment"
+            app:destination="@id/settingsFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
     </fragment>
     <dialog
         android:id="@+id/addProductDialogFragment"
@@ -47,4 +54,26 @@
             android:id="@+id/action_productDetailFragment_to_deleteProductDialogFragment"
             app:destination="@id/deleteProductDialogFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="alexeyzhizhensky.watchberries.ui.SettingsFragment"
+        android:label="SettingsFragment" >
+        <action
+            android:id="@+id/action_settingsFragment_to_singleChoiceListDialogFragment"
+            app:destination="@id/singleChoiceListDialogFragment" />
+    </fragment>
+    <dialog
+        android:id="@+id/singleChoiceListDialogFragment"
+        android:name="alexeyzhizhensky.watchberries.ui.SingleChoiceListDialogFragment"
+        android:label="SingleChoiceListDialogFragment" >
+        <argument
+            android:name="title"
+            app:argType="reference" />
+        <argument
+            android:name="items"
+            app:argType="reference" />
+        <argument
+            android:name="key"
+            app:argType="string" />
+    </dialog>
 </navigation>

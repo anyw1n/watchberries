@@ -7,4 +7,9 @@
         android:icon="@drawable/ic_baseline_sort_24"
         android:title="@string/sort"
         app:showAsAction="always" />
+    <item
+        android:id="@+id/action_settings"
+        android:icon="@drawable/ic_baseline_settings_24"
+        android:title="@string/settings"
+        app:showAsAction="never" />
 </menu>

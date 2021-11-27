@@ -52,4 +52,13 @@
     <string name="notification_channel_description">Notifications about product price drops and availability</string>
     <string name="open_page">Open in app or browser</string>
     <string name="enable_n_a_values_on_chart">Enable N/A values on chart</string>
+    <string name="settings">Settings</string>
+    <string name="language">Language</string>
+    <string name="language_pick_dialog_title">Select app language</string>
+    <string-array name="language_items">
+        <item>Default</item>
+        <item>English</item>
+        <item>Русский</item>
+    </string-array>
+    <string name="message_restart_app">Please restart the application to apply the changes</string>
 </resources>
