@@ -6,11 +6,8 @@ import alexeyzhizhensky.watchberries.data.SharedPrefsRepository
 import alexeyzhizhensky.watchberries.data.WbException
 import alexeyzhizhensky.watchberries.network.WbConnectivityManager
 import androidx.annotation.StringRes
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -20,10 +17,7 @@ class ProductListViewModel @Inject constructor(
     connectivityManager: WbConnectivityManager,
     private val productRepository: ProductRepository,
     private val sharedPrefsRepository: SharedPrefsRepository
-) : ViewModel() {
-
-    private val _eventFlow = MutableSharedFlow<Event>()
-    val eventFlow = _eventFlow.asSharedFlow()
+) : BaseViewModel<ProductListViewModel.Event>() {
 
     val pagingDataFlow = productRepository.observePaginated()
 
@@ -58,7 +52,7 @@ class ProductListViewModel @Inject constructor(
         }
     }
 
-    sealed class Event {
+    sealed class Event : BaseViewModel.Event {
 
         object RefreshProducts : Event()
         data class ShowToast(@StringRes val textRes: Int) : Event()

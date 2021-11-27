@@ -10,12 +10,9 @@ import alexeyzhizhensky.watchberries.network.WbConnectivityManager
 import android.content.Context
 import android.content.Intent
 import androidx.annotation.StringRes
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.collectLatest
@@ -28,7 +25,7 @@ class ProductDetailViewModel @Inject constructor(
     connectivityManager: WbConnectivityManager,
     private val productRepository: ProductRepository,
     private val priceRepository: PriceRepository
-) : ViewModel() {
+) : BaseViewModel<ProductDetailViewModel.Event>() {
 
     private val _productFlow = MutableStateFlow<Product?>(null)
     val productFlow = _productFlow.asStateFlow()
@@ -38,9 +35,6 @@ class ProductDetailViewModel @Inject constructor(
 
     private val _uiStateFlow = MutableStateFlow(UiState.NotLoading)
     val uiStateFlow = _uiStateFlow.asStateFlow()
-
-    private val _eventFlow = MutableSharedFlow<Event>()
-    val eventFlow = _eventFlow.asSharedFlow()
 
     init {
         viewModelScope.apply {
@@ -107,7 +101,7 @@ class ProductDetailViewModel @Inject constructor(
         Loading, NotLoading
     }
 
-    sealed class Event {
+    sealed class Event : BaseViewModel.Event {
 
         object ProductDeleted : Event()
 
