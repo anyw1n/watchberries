@@ -2,6 +2,7 @@ package alexeyzhizhensky.watchberries.ui
 
 import alexeyzhizhensky.watchberries.R
 import alexeyzhizhensky.watchberries.data.LocaleUtils
+import alexeyzhizhensky.watchberries.data.ThemeUtils
 import alexeyzhizhensky.watchberries.databinding.FragmentSettingsBinding
 import alexeyzhizhensky.watchberries.utils.toast
 import alexeyzhizhensky.watchberries.viewmodels.SettingsViewModel
@@ -12,8 +13,9 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.flowWithLifecycle
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -29,6 +31,11 @@ class SettingsFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        setFragmentResultListener(CHANGE_THEME_REQUEST_KEY) { _, bundle ->
+            val theme = ThemeUtils.Theme.values[bundle.getInt(INDEX_KEY)]
+            viewModel.changeTheme(theme)
+        }
 
         setFragmentResultListener(CHANGE_LOCALE_REQUEST_KEY) { _, bundle ->
             val locale = LocaleUtils.SupportedLocale.values[bundle.getInt(INDEX_KEY)]
@@ -60,6 +67,19 @@ class SettingsFragment : Fragment() {
             setNavigationOnClickListener { findNavController().navigateUp() }
         }
 
+        themeSetting.apply {
+            settingTitleTextView.text = getString(R.string.theme)
+            root.setOnClickListener {
+                val action = SettingsFragmentDirections
+                    .actionSettingsFragmentToSingleChoiceListDialogFragment(
+                        R.string.theme_pick_dialog_title,
+                        R.array.theme_items,
+                        CHANGE_THEME_REQUEST_KEY
+                    )
+                findNavController().navigate(action)
+            }
+        }
+
         languageSetting.apply {
             settingTitleTextView.text = getString(R.string.language)
             root.setOnClickListener {
@@ -76,12 +96,21 @@ class SettingsFragment : Fragment() {
 
     private fun subscribeToFlows() = viewLifecycleOwner.lifecycleScope.apply {
         launch {
-            viewModel.localeFlow
-                .flowWithLifecycle(viewLifecycleOwner.lifecycle)
-                .collectLatest {
-                    binding.languageSetting.settingSubtitleTextView.text =
-                        resources.getStringArray(R.array.language_items)[it.ordinal]
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                launch {
+                    viewModel.themeFlow.collectLatest {
+                        binding.themeSetting.settingSubtitleTextView.text =
+                            resources.getStringArray(R.array.theme_items)[it.ordinal]
+                    }
                 }
+
+                launch {
+                    viewModel.localeFlow.collectLatest {
+                        binding.languageSetting.settingSubtitleTextView.text =
+                            resources.getStringArray(R.array.language_items)[it.ordinal]
+                    }
+                }
+            }
         }
 
         launch {
@@ -95,6 +124,7 @@ class SettingsFragment : Fragment() {
 
     companion object {
 
+        const val CHANGE_THEME_REQUEST_KEY = "CHANGE_THEME_REQUEST"
         const val CHANGE_LOCALE_REQUEST_KEY = "CHANGE_LOCALE_REQUEST"
 
         const val INDEX_KEY = "INDEX"

@@ -60,4 +60,11 @@
         <item>Русский</item>
     </string-array>
     <string name="message_restart_app">Пожалуйста, перезапустите приложение для применения изменений</string>
+    <string name="theme">Тема</string>
+    <string name="theme_pick_dialog_title">Выберите тему</string>
+    <string-array name="theme_items">
+        <item>Выбор системы</item>
+        <item>Светлая</item>
+        <item>Тёмная</item>
+    </string-array>
 </resources>

@@ -61,4 +61,11 @@
         <item>Русский</item>
     </string-array>
     <string name="message_restart_app">Please restart the application to apply the changes</string>
+    <string name="theme">Theme</string>
+    <string name="theme_pick_dialog_title">Select theme</string>
+    <string-array name="theme_items">
+        <item>System default</item>
+        <item>Light</item>
+        <item>Dark</item>
+    </string-array>
 </resources>

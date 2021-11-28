@@ -32,6 +32,11 @@ class SharedPrefsRepository @Inject constructor(
 
     private fun saveSort(sort: Sort) = sharedPrefs.edit { putString(SORT_KEY, gson.toJson(sort)) }
 
+    fun getTheme() = sharedPrefs.getString(THEME_KEY, null)?.let { ThemeUtils.Theme.valueOf(it) }
+        ?: ThemeUtils.Theme.SystemDefault.also(::saveTheme)
+
+    fun saveTheme(theme: ThemeUtils.Theme) = sharedPrefs.edit { putString(THEME_KEY, theme.name) }
+
     fun getLocale() =
         sharedPrefs.getString(LOCALE_KEY, null)?.let { LocaleUtils.SupportedLocale.valueOf(it) }
             ?: LocaleUtils.SupportedLocale.Default.also(::saveLocale)
@@ -44,6 +49,7 @@ class SharedPrefsRepository @Inject constructor(
         private const val SHARED_PREFS_NAME = "alexeyzhizhensky.watchberries.preferences"
 
         private const val SORT_KEY = "SORT"
+        private const val THEME_KEY = "THEME"
         private const val LOCALE_KEY = "LOCALE"
 
         fun getLocale(context: Context) =
