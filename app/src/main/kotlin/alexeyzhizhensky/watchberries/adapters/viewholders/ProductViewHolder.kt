@@ -45,7 +45,7 @@ class ProductViewHolder(
         brandTextView.text = product.brand
         skuTextView.text = product.sku.toString()
 
-        val relativeDateTime = getRelativeDateTime(context, product.lastPrice.datetime)
+        val relativeDateTime = context.getRelativeDateTime(product.lastPrice.datetime)
         dateTimeTextView.text = context.getString(R.string.last_update, relativeDateTime)
 
         priceTextView.text = if (product.lastPrice.value == 0) {

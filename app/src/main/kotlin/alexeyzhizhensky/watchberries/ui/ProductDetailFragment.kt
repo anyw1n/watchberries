@@ -194,7 +194,7 @@ class ProductDetailFragment : Fragment() {
             getString(R.string.price, product.lastPrice.value)
         }
 
-        val relativeDateTime = getRelativeDateTime(requireContext(), product.lastPrice.datetime)
+        val relativeDateTime = context?.getRelativeDateTime(product.lastPrice.datetime)
         detailDateTimeTextView.text = getString(R.string.last_update, relativeDateTime)
 
         detailTitleTextView.text = product.title

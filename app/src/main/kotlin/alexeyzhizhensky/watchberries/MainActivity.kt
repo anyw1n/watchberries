@@ -14,9 +14,6 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
     @Inject
     lateinit var connectivityManager: WbConnectivityManager
 
-    @Inject
-    lateinit var notificationManager: WbNotificationManager
-
     override fun attachBaseContext(newBase: Context?) {
         super.attachBaseContext(newBase?.let { LocaleUtils.getLocalizedContext(it) })
     }
@@ -24,7 +21,6 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         connectivityManager.subscribe()
-        notificationManager.clearNotifications()
     }
 
     override fun onDestroy() {

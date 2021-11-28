@@ -1,8 +1,6 @@
 package alexeyzhizhensky.watchberries.viewmodels
 
-import alexeyzhizhensky.watchberries.R
 import alexeyzhizhensky.watchberries.data.LocaleUtils
-import androidx.annotation.StringRes
 import alexeyzhizhensky.watchberries.data.ThemeUtils
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -25,11 +23,11 @@ class SettingsViewModel @Inject constructor(
     fun changeLocale(locale: LocaleUtils.SupportedLocale) {
         if (locale == localeFlow.value) return
         localeUtils.setLocale(locale)
-        _eventFlow.tryEmit(Event.ShowToast(R.string.message_restart_app))
+        _eventFlow.tryEmit(Event.RecreateActivity)
     }
 
     sealed class Event : BaseViewModel.Event {
 
-        data class ShowToast(@StringRes val textRes: Int) : Event()
+        object RecreateActivity : Event()
     }
 }

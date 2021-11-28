@@ -4,7 +4,6 @@ import alexeyzhizhensky.watchberries.R
 import alexeyzhizhensky.watchberries.data.LocaleUtils
 import alexeyzhizhensky.watchberries.data.ThemeUtils
 import alexeyzhizhensky.watchberries.databinding.FragmentSettingsBinding
-import alexeyzhizhensky.watchberries.utils.toast
 import alexeyzhizhensky.watchberries.viewmodels.SettingsViewModel
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -116,7 +115,7 @@ class SettingsFragment : Fragment() {
         launch {
             viewModel.eventFlow.collectLatest { event ->
                 when (event) {
-                    is SettingsViewModel.Event.ShowToast -> context?.toast(event.textRes)
+                    is SettingsViewModel.Event.RecreateActivity -> activity?.recreate()
                 }
             }
         }

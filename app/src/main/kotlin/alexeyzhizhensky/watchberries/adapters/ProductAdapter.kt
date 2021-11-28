@@ -8,11 +8,11 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
-import dagger.hilt.android.qualifiers.ApplicationContext
+import dagger.hilt.android.qualifiers.ActivityContext
 import javax.inject.Inject
 
 class ProductAdapter @Inject constructor(
-    @ApplicationContext private val context: Context
+    @ActivityContext private val context: Context
 ) : PagingDataAdapter<Product, ProductViewHolder>(diffCallback) {
 
     private var onItemClick: ((Int) -> Unit)? = null

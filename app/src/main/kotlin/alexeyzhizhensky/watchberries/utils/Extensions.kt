@@ -102,9 +102,9 @@ fun HttpException.toWbException() = when (code()) {
     else -> WbException.Http.Other(this)
 }
 
-fun getRelativeDateTime(context: Context, localDateTime: LocalDateTime): CharSequence =
+fun Context.getRelativeDateTime(localDateTime: LocalDateTime): CharSequence =
     DateUtils.getRelativeDateTimeString(
-        context,
+        this,
         localDateTime.toEpochSecond(ZoneOffset.UTC) * DateUtils.SECOND_IN_MILLIS,
         DateUtils.MINUTE_IN_MILLIS,
         DateUtils.WEEK_IN_MILLIS,
