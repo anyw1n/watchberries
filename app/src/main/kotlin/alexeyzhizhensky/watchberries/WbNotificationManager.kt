@@ -24,7 +24,7 @@ class WbNotificationManager @Inject constructor(
 
     private val notificationBuilder = NotificationCompat.Builder(context, CHANNEL_ID)
         .setSmallIcon(R.drawable.ic_notification_icon)
-        .setColor(ContextCompat.getColor(context, R.color.primary))
+        .setColor(ContextCompat.getColor(context, R.color.blue_bayoux))
         .setColorized(true)
         .setPriority(NotificationCompat.PRIORITY_DEFAULT)
         .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)

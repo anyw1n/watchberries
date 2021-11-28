@@ -4,6 +4,7 @@ import alexeyzhizhensky.watchberries.R
 import alexeyzhizhensky.watchberries.data.Price
 import alexeyzhizhensky.watchberries.data.room.Product
 import alexeyzhizhensky.watchberries.databinding.FragmentProductDetailBinding
+import alexeyzhizhensky.watchberries.utils.getColorFromTheme
 import alexeyzhizhensky.watchberries.utils.getRelativeDateTime
 import alexeyzhizhensky.watchberries.utils.resetYAxisMinimum
 import alexeyzhizhensky.watchberries.utils.setYAxisMinimum
@@ -13,7 +14,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResult
@@ -130,21 +130,25 @@ class ProductDetailFragment : Fragment() {
         pricesDataSet.apply {
             mode = LineDataSet.Mode.STEPPED
             setDrawFilled(true)
-            fillColor = ContextCompat.getColor(context, R.color.secondary_variant)
+            fillColor = context.getColorFromTheme(R.attr.colorChartFill)
             setDrawValues(false)
-            val lineColor = ContextCompat.getColor(context, R.color.primary)
+            val lineColor = context.getColorFromTheme(R.attr.colorChartLine)
             color = lineColor
             setCircleColor(lineColor)
         }
 
         description.isEnabled = false
+        val textColor = context.getColorFromTheme(R.attr.colorText)
         xAxis.apply {
             position = XAxis.XAxisPosition.BOTTOM
             valueFormatter = xAxisValueFormatter
             granularity = CHART_X_AXIS_GRANULARITY
             spaceMin = CHART_X_AXIS_SPACE
             spaceMax = CHART_X_AXIS_SPACE
+            this.textColor = textColor
         }
+        axisLeft.textColor = textColor
+        axisRight.textColor = textColor
         legend.isEnabled = false
         isDoubleTapToZoomEnabled = false
 

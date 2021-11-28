@@ -11,17 +11,17 @@
             <path
                 android:name="first"
                 android:fillAlpha="0"
-                android:fillColor="?attr/colorOnBackground"
+                android:fillColor="?attr/colorOnSurface"
                 android:pathData="M8,8m-5,0a5,5 0,1 1,10 0a5,5 0,1 1,-10 0" />
             <path
                 android:name="second"
                 android:fillAlpha="0"
-                android:fillColor="?attr/colorOnBackground"
+                android:fillColor="?attr/colorOnSurface"
                 android:pathData="M22,8m-5,0a5,5 0,1 1,10 0a5,5 0,1 1,-10 0" />
             <path
                 android:name="third"
                 android:fillAlpha="0"
-                android:fillColor="?attr/colorOnBackground"
+                android:fillColor="?attr/colorOnSurface"
                 android:pathData="M37,8m-5,0a5,5 0,1 1,10 0a5,5 0,1 1,-10 0" />
         </vector>
     </aapt:attr>

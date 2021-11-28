@@ -3,6 +3,7 @@ package alexeyzhizhensky.watchberries.adapters.viewholders
 import alexeyzhizhensky.watchberries.R
 import alexeyzhizhensky.watchberries.data.room.Product
 import alexeyzhizhensky.watchberries.databinding.ListItemProductBinding
+import alexeyzhizhensky.watchberries.utils.getColorFromTheme
 import alexeyzhizhensky.watchberries.utils.getRelativeDateTime
 import android.content.Context
 import androidx.core.content.ContextCompat
@@ -54,7 +55,7 @@ class ProductViewHolder(
         }
 
         val trendDrawable = ContextCompat.getDrawable(context, product.trend.drawableId)?.apply {
-            setTint(product.trend.color)
+            setTint(context.getColorFromTheme(product.trend.colorAttr))
         }
         trendImageView.load(trendDrawable)
     }

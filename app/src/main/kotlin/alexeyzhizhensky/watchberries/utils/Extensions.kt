@@ -3,7 +3,9 @@ package alexeyzhizhensky.watchberries.utils
 import alexeyzhizhensky.watchberries.data.WbException
 import android.content.Context
 import android.text.format.DateUtils
+import android.util.TypedValue
 import android.widget.Toast
+import androidx.annotation.AttrRes
 import androidx.annotation.StringRes
 import androidx.paging.PagingState
 import com.github.mikephil.charting.charts.LineChart
@@ -118,3 +120,7 @@ fun LineChart.resetYAxisMinimum() {
     axisLeft.resetAxisMinimum()
     axisRight.resetAxisMinimum()
 }
+
+fun Context.getColorFromTheme(@AttrRes colorAttr: Int) = TypedValue().also {
+    theme.resolveAttribute(colorAttr, it, true)
+}.data

@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:fitsSystemWindows="true"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        android:theme="@style/ThemeOverlay.MaterialComponents.Dark"
         app:navigationIcon="@drawable/ic_baseline_chevron_left_24"
         app:popupTheme="?attr/actionBarPopupTheme"
         app:title="@string/app_name" />

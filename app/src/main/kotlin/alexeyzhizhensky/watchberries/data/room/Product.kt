@@ -2,8 +2,8 @@ package alexeyzhizhensky.watchberries.data.room
 
 import alexeyzhizhensky.watchberries.R
 import alexeyzhizhensky.watchberries.data.Price
-import android.graphics.Color
 import android.net.Uri
+import androidx.annotation.AttrRes
 import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.Ignore
@@ -33,12 +33,12 @@ data class Product(
 
     enum class Trend(
         val drawableId: Int,
-        val color: Int
+        @AttrRes val colorAttr: Int
     ) {
 
-        DOWNWARD(R.drawable.ic_baseline_trending_down_24, Color.GREEN),
-        STABLE(R.drawable.ic_baseline_trending_flat_24, Color.BLACK),
-        UPWARD(R.drawable.ic_baseline_trending_up_24, Color.RED);
+        DOWNWARD(R.drawable.ic_baseline_trending_down_24, R.attr.colorGreenIcon),
+        STABLE(R.drawable.ic_baseline_trending_flat_24, R.attr.colorText),
+        UPWARD(R.drawable.ic_baseline_trending_up_24, R.attr.colorRedIcon);
     }
 
     private companion object {

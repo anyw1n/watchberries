@@ -1,6 +1,6 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Theme.Watchberries.Main" parent="Theme.MaterialComponents.Light.NoActionBar">
+    <style name="Theme.Watchberries.Main" parent="Theme.MaterialComponents.NoActionBar">
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/blue_bayoux</item>
         <item name="colorPrimaryVariant">@color/big_stone</item>
@@ -10,25 +10,28 @@
         <item name="colorSecondaryVariant">@color/dairy_cream</item>
         <item name="colorOnSecondary">@color/gimblet</item>
 
-        <item name="colorOnSurface">?colorPrimary</item>
+        <item name="colorOnSurface">?colorOnPrimary</item>
         <item name="colorGreenIcon">@color/malachite</item>
         <item name="colorRedIcon">@color/alizarin_crimson</item>
-        <item name="colorText">@color/text_color_dark</item>
+        <item name="colorText">@color/text_color_light</item>
 
-        <item name="colorChartLine">?colorPrimary</item>
-        <item name="colorChartFill">?colorSecondaryVariant</item>
-
-        <!-- Status bar color. -->
-        <item name="android:statusBarColor" tools:targetApi="l">?colorPrimaryVariant</item>
+        <item name="colorChartLine">?colorSecondaryVariant</item>
+        <item name="colorChartFill">?colorPrimary</item>
 
         <item name="shapeAppearanceMediumComponent">
             @style/Theme.Watchberries.MediumShapeAppearance
         </item>
+        <item name="android:alertDialogTheme">@style/Theme.Watchberries.AlertDialog</item>
+        <item name="bottomSheetDialogTheme">@style/Theme.Watchberries.BottomSheetDialog</item>
 
         <item name="android:forceDarkAllowed" tools:targetApi="q">false</item>
     </style>
 
-    <style name="Theme.Watchberries.MediumShapeAppearance" parent="ShapeAppearance.MaterialComponents.MediumComponent">
-        <item name="cornerSize">@dimen/corner_radius</item>
+    <style name="Theme.Watchberries.AlertDialog" parent="ThemeOverlay.MaterialComponents.Dialog.Alert.Framework">
+        <item name="colorPrimary">?colorSecondary</item>
+    </style>
+
+    <style name="Theme.Watchberries.BottomSheetDialog" parent="ThemeOverlay.MaterialComponents.BottomSheetDialog">
+        <item name="colorPrimary">?colorSecondary</item>
     </style>
 </resources>
