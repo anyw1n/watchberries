@@ -48,10 +48,10 @@ class ProductViewHolder(
         val relativeDateTime = context.getRelativeDateTime(product.lastPrice.datetime)
         dateTimeTextView.text = context.getString(R.string.last_update, relativeDateTime)
 
-        priceTextView.text = if (product.lastPrice.value == 0) {
+        priceTextView.text = if (product.lastPrice.value == 0F) {
             context.getString(R.string.not_available_short)
         } else {
-            context.getString(R.string.price, product.lastPrice.value)
+            "${product.lastPrice.value} ${product.lastPrice.currency.name}"
         }
 
         val trendDrawable = ContextCompat.getDrawable(context, product.trend.drawableId)?.apply {

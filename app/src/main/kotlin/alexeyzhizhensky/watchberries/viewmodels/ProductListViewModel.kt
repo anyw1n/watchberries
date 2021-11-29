@@ -2,7 +2,7 @@ package alexeyzhizhensky.watchberries.viewmodels
 
 import alexeyzhizhensky.watchberries.R
 import alexeyzhizhensky.watchberries.data.ProductRepository
-import alexeyzhizhensky.watchberries.data.SharedPrefsRepository
+import alexeyzhizhensky.watchberries.data.SortUtils
 import alexeyzhizhensky.watchberries.data.WbException
 import alexeyzhizhensky.watchberries.network.WbConnectivityManager
 import androidx.annotation.StringRes
@@ -16,7 +16,7 @@ import javax.inject.Inject
 class ProductListViewModel @Inject constructor(
     connectivityManager: WbConnectivityManager,
     private val productRepository: ProductRepository,
-    private val sharedPrefsRepository: SharedPrefsRepository
+    private val sortUtils: SortUtils
 ) : BaseViewModel<ProductListViewModel.Event>() {
 
     val pagingDataFlow = productRepository.observePaginated()
@@ -36,7 +36,7 @@ class ProductListViewModel @Inject constructor(
             }
 
             launch {
-                sharedPrefsRepository.sort.collectLatest {
+                sortUtils.stateFlow.collectLatest {
                     _eventFlow.emit(Event.RefreshProducts)
                 }
             }

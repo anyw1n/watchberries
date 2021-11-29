@@ -1,6 +1,7 @@
 package alexeyzhizhensky.watchberries.viewmodels
 
 import alexeyzhizhensky.watchberries.R
+import alexeyzhizhensky.watchberries.data.CurrencyUtils
 import alexeyzhizhensky.watchberries.data.Price
 import alexeyzhizhensky.watchberries.data.PriceRepository
 import alexeyzhizhensky.watchberries.data.ProductRepository
@@ -24,7 +25,8 @@ import javax.inject.Inject
 class ProductDetailViewModel @Inject constructor(
     connectivityManager: WbConnectivityManager,
     private val productRepository: ProductRepository,
-    private val priceRepository: PriceRepository
+    private val priceRepository: PriceRepository,
+    private val currencyUtils: CurrencyUtils
 ) : BaseViewModel<ProductDetailViewModel.Event>() {
 
     private val _productFlow = MutableStateFlow<Product?>(null)
@@ -96,6 +98,8 @@ class ProductDetailViewModel @Inject constructor(
             _eventFlow.emit(Event.ShowException(exception))
         }
     }
+
+    fun getCurrency() = currencyUtils.stateFlow.value
 
     enum class UiState {
         Loading, NotLoading

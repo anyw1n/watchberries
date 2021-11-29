@@ -1,25 +1,20 @@
 package alexeyzhizhensky.watchberries.data
 
+import alexeyzhizhensky.watchberries.utils.Utils
 import android.content.Context
 import android.content.res.Configuration
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import java.util.Locale
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
 class LocaleUtils @Inject constructor(
-    private val sharedPrefsRepository: SharedPrefsRepository
-) {
+    sharedPrefsRepository: SharedPrefsRepository
+) : Utils<LocaleUtils.SupportedLocale>(sharedPrefsRepository) {
 
-    private val _localeFlow = MutableStateFlow(sharedPrefsRepository.getLocale())
-    val localeFlow = _localeFlow.asStateFlow()
-
-    fun setLocale(supportedLocale: SupportedLocale) {
-        _localeFlow.tryEmit(supportedLocale)
-        sharedPrefsRepository.saveLocale(supportedLocale)
-    }
+    override val clazz: Class<SupportedLocale> = SupportedLocale::class.java
+    override val key: String = KEY
+    override val defaultValue: SupportedLocale = SupportedLocale.Default
 
     enum class SupportedLocale(
         val code: String
@@ -37,8 +32,15 @@ class LocaleUtils @Inject constructor(
 
     companion object {
 
+        private const val KEY = "LOCALE"
+
         fun getLocalizedContext(baseContext: Context): Context {
-            val supportedLocale = SharedPrefsRepository.getLocale(baseContext)
+            val supportedLocale = SharedPrefsRepository.get(
+                baseContext,
+                KEY,
+                SupportedLocale.Default,
+                SupportedLocale::class.java
+            )
             return if (supportedLocale == SupportedLocale.Default) {
                 baseContext
             } else {

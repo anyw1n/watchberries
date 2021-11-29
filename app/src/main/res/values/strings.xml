@@ -9,7 +9,6 @@
     <string name="delete">Delete</string>
     <string name="not_available_short">N/A</string>
     <string name="not_available_long">Not available</string>
-    <string name="price" translatable="false">%d ₽</string>
     <string name="last_update">Last update: %s</string>
     <string name="retry">Retry</string>
     <string name="product_image">Product image</string>
@@ -66,5 +65,11 @@
         <item>System default</item>
         <item>Light</item>
         <item>Dark</item>
+    </string-array>
+    <string name="currency">Currency</string>
+    <string name="currency_pick_dialog_title">Select currency</string>
+    <string-array name="currency_items">
+        <item>RUB</item>
+        <item>BYN</item>
     </string-array>
 </resources>

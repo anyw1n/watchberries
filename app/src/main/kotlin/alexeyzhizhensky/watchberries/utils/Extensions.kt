@@ -47,9 +47,11 @@ fun <Key : Any, Value : Any> PagingState<Key, Value>.anchorItemOrNull() =
     anchorPosition?.let(::closestItemToPosition)
 
 inline fun <reified T> GsonBuilder.registerDeserializer(
-    crossinline deserializer: (JsonElement) -> T
+    crossinline deserializer: (String) -> T
 ): GsonBuilder {
-    registerTypeAdapter(T::class.java, JsonDeserializer { json, _, _ -> deserializer(json) })
+    registerTypeAdapter(
+        T::class.java,
+        JsonDeserializer { json, _, _ -> deserializer(json.asJsonPrimitive.asString) })
     return this
 }
 

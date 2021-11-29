@@ -13,10 +13,13 @@ import javax.inject.Singleton
 
 @Singleton
 class PriceRepository @Inject constructor(
+    currencyUtils: CurrencyUtils,
     private val service: WbApiService,
     private val priceDao: PriceDao,
     private val db: WbDatabase
 ) {
+
+    private val currencyFlow = currencyUtils.stateFlow
 
     @OptIn(ExperimentalCoroutinesApi::class)
     fun getPricesFlow(sku: Int) = priceDao.getBySku(sku).mapLatest { list ->
@@ -24,7 +27,7 @@ class PriceRepository @Inject constructor(
     }
 
     suspend fun updatePrices(sku: Int) {
-        val prices = service.getPrices(sku).suspend()
+        val prices = service.getPrices(sku, currencyFlow.value).suspend()
 
         db.withTransaction {
             priceDao.deleteAllWithSku(sku)

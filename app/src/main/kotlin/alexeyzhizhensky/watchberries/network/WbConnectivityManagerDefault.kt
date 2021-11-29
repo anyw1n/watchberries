@@ -11,10 +11,11 @@ import androidx.annotation.RequiresApi
 @RequiresApi(Build.VERSION_CODES.N)
 class WbConnectivityManagerDefault(context: Context) : WbConnectivityManager(context) {
 
-    override fun getConnectStatus(): Boolean? = connectivityManager?.let {
-        val network = it.activeNetwork ?: return false
-        it.getNetworkCapabilities(network)?.hasCapability(NET_CAPABILITY_INTERNET)
-    }
+    override val isConnected: Boolean?
+        get() = connectivityManager?.let {
+            val network = it.activeNetwork ?: return false
+            it.getNetworkCapabilities(network)?.hasCapability(NET_CAPABILITY_INTERNET)
+        }
 
     override fun subscribe() {
         connectivityManager?.registerDefaultNetworkCallback(networkCallback)

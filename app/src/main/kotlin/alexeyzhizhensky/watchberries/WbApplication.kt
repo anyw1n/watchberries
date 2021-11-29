@@ -17,6 +17,6 @@ class WbApplication : Application() {
     override fun onCreate() {
         super.onCreate()
         notificationManager.clearNotifications()
-        themeUtils.setTheme(themeUtils.themeFlow.value)
+        themeUtils.setValue(themeUtils.stateFlow.value)
     }
 }

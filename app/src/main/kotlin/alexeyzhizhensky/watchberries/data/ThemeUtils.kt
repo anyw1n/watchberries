@@ -1,23 +1,22 @@
 package alexeyzhizhensky.watchberries.data
 
+import alexeyzhizhensky.watchberries.utils.Utils
 import androidx.appcompat.app.AppCompatDelegate
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
 class ThemeUtils @Inject constructor(
-    private val sharedPrefsRepository: SharedPrefsRepository
-) {
+    sharedPrefsRepository: SharedPrefsRepository
+) : Utils<ThemeUtils.Theme>(sharedPrefsRepository) {
 
-    private val _themeFlow = MutableStateFlow(sharedPrefsRepository.getTheme())
-    val themeFlow = _themeFlow.asStateFlow()
+    override val clazz: Class<Theme> = Theme::class.java
+    override val key: String = "THEME"
+    override val defaultValue: Theme = Theme.SystemDefault
 
-    fun setTheme(theme: Theme) {
-        AppCompatDelegate.setDefaultNightMode(theme.mode)
-        sharedPrefsRepository.saveTheme(theme)
-        _themeFlow.tryEmit(theme)
+    override fun setValue(newValue: Theme) {
+        AppCompatDelegate.setDefaultNightMode(newValue.mode)
+        super.setValue(newValue)
     }
 
     enum class Theme(val mode: Int) {

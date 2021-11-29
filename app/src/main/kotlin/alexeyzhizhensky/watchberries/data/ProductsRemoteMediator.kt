@@ -20,16 +20,18 @@ import javax.inject.Inject
 
 @OptIn(ExperimentalPagingApi::class)
 class ProductsRemoteMediator @Inject constructor(
+    sortUtils: SortUtils,
+    currencyUtils: CurrencyUtils,
     private val userRepository: UserRepository,
     private val service: WbApiService,
     private val db: WbDatabase,
     private val productRemoteKeyDao: ProductRemoteKeyDao,
-    private val productDao: ProductDao,
-    sharedPrefsRepository: SharedPrefsRepository
+    private val productDao: ProductDao
 ) : RemoteMediator<Int, Product>() {
 
     private val initialPage = WbApiService.INITIAL_PAGE
-    private val sort = sharedPrefsRepository.sort
+    private val sortFlow = sortUtils.stateFlow
+    private val currencyFlow = currencyUtils.stateFlow
 
     override suspend fun initialize() = InitializeAction.LAUNCH_INITIAL_REFRESH
 
@@ -107,7 +109,8 @@ class ProductsRemoteMediator @Inject constructor(
 
     private suspend fun fetchPage(user: User, loadType: LoadType, page: Int, limit: Int): Page {
         val response =
-            service.getProducts(user.id, user.key, page, limit, sort.value).suspendResponse()
+            service.getProducts(user.id, user.key, page, limit, sortFlow.value, currencyFlow.value)
+                .suspendResponse()
 
         if (!response.isSuccessful) throw HttpException(response).toWbException()
 

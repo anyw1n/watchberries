@@ -36,9 +36,9 @@ data class Product(
         @AttrRes val colorAttr: Int
     ) {
 
-        DOWNWARD(R.drawable.ic_baseline_trending_down_24, R.attr.colorGreenIcon),
-        STABLE(R.drawable.ic_baseline_trending_flat_24, R.attr.colorText),
-        UPWARD(R.drawable.ic_baseline_trending_up_24, R.attr.colorRedIcon);
+        Downward(R.drawable.ic_baseline_trending_down_24, R.attr.colorGreenIcon),
+        Stable(R.drawable.ic_baseline_trending_flat_24, R.attr.colorText),
+        Upward(R.drawable.ic_baseline_trending_up_24, R.attr.colorRedIcon);
     }
 
     private companion object {

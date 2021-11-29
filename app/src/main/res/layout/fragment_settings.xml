@@ -15,7 +15,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <include
-        android:id="@+id/themeSetting"
+        android:id="@+id/currencySetting"
         layout="@layout/item_settings"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -25,6 +25,18 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/settingsAppBar" />
+
+    <include
+        android:id="@+id/themeSetting"
+        layout="@layout/item_settings"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="@dimen/default_margin"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/currencySetting" />
 
     <include
         android:id="@+id/languageSetting"

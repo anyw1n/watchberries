@@ -11,12 +11,10 @@ abstract class WbConnectivityManager(context: Context) {
 
     protected val connectivityManager =
         ContextCompat.getSystemService(context, ConnectivityManager::class.java)
-    protected val isConnected: Boolean? get() = getConnectStatus()
+    abstract val isConnected: Boolean?
 
-    protected val _networkAvailability = MutableStateFlow(isConnected)
-    val networkAvailability = _networkAvailability.filterNotNull().drop(1)
-
-    protected abstract fun getConnectStatus(): Boolean?
+    protected val _networkAvailability by lazy { MutableStateFlow(isConnected) }
+    val networkAvailability by lazy { _networkAvailability.filterNotNull().drop(1) }
 
     abstract fun subscribe()
 

@@ -54,14 +54,21 @@ interface WbApiService {
         @Query("key") key: UUID,
         @Query("page") page: Int,
         @Query("limit") limit: Int,
-        @Query("sort") sort: Sort
+        @Query("sort") sort: Sort,
+        @Query("currency") currency: Price.Currency
     ): Call<List<Product>>
 
     @GET("products/{sku}")
-    fun getProduct(@Path("sku") sku: Int): Call<Product>
+    fun getProduct(
+        @Path("sku") sku: Int,
+        @Query("currency") currency: Price.Currency
+    ): Call<Product>
 
     @GET("products/{sku}/prices")
-    fun getPrices(@Path("sku") sku: Int): Call<List<Price>>
+    fun getPrices(
+        @Path("sku") sku: Int,
+        @Query("currency") currency: Price.Currency
+    ): Call<List<Price>>
 
     companion object {
 
@@ -75,8 +82,7 @@ interface WbApiService {
             .create<WbApiService>()
 
         private fun buildGson() = GsonBuilder().apply {
-            registerDeserializer { LocalDateTime.parse(it.asJsonPrimitive.asString) }
-            registerDeserializer { Product.Trend.valueOf(it.asJsonPrimitive.asString.uppercase()) }
+            registerDeserializer { LocalDateTime.parse(it) }
             registerSerializer<Sort> { it.toString() }
             setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
         }.create()

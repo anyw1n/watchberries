@@ -152,7 +152,7 @@ class ProductDetailFragment : Fragment() {
         legend.isEnabled = false
         isDoubleTapToZoomEnabled = false
 
-        marker = ChartMarkerView(context, this)
+        marker = ChartMarkerView(context, this, viewModel.getCurrency())
     }
 
     private fun subscribeToFlows() = viewLifecycleOwner.lifecycleScope.apply {
@@ -188,10 +188,10 @@ class ProductDetailFragment : Fragment() {
             crossfade(true)
         }
 
-        detailPriceTextView.text = if (product.lastPrice.value == 0) {
+        detailPriceTextView.text = if (product.lastPrice.value == 0F) {
             getString(R.string.not_available_long)
         } else {
-            getString(R.string.price, product.lastPrice.value)
+            "${product.lastPrice.value} ${product.lastPrice.currency.name}"
         }
 
         val relativeDateTime = context?.getRelativeDateTime(product.lastPrice.datetime)
@@ -204,7 +204,7 @@ class ProductDetailFragment : Fragment() {
 
     private fun FragmentProductDetailBinding.bindPrices(prices: List<Price>) {
         var entries = prices.map {
-            Entry(it.datetime.toEpochSecond(ZoneOffset.UTC).toFloat(), it.value.toFloat())
+            Entry(it.datetime.toEpochSecond(ZoneOffset.UTC).toFloat(), it.value)
         }
 
         if (pricesSwitch.isChecked) {

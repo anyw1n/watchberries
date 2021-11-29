@@ -2,6 +2,7 @@ package alexeyzhizhensky.watchberries.ui
 
 import alexeyzhizhensky.watchberries.R
 import alexeyzhizhensky.watchberries.data.LocaleUtils
+import alexeyzhizhensky.watchberries.data.Price
 import alexeyzhizhensky.watchberries.data.ThemeUtils
 import alexeyzhizhensky.watchberries.databinding.FragmentSettingsBinding
 import alexeyzhizhensky.watchberries.viewmodels.SettingsViewModel
@@ -30,6 +31,11 @@ class SettingsFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        setFragmentResultListener(CHANGE_CURRENCY_REQUEST_KEY) { _, bundle ->
+            val currency = Price.Currency.values[bundle.getInt(INDEX_KEY)]
+            viewModel.changeCurrency(currency)
+        }
 
         setFragmentResultListener(CHANGE_THEME_REQUEST_KEY) { _, bundle ->
             val theme = ThemeUtils.Theme.values[bundle.getInt(INDEX_KEY)]
@@ -66,6 +72,19 @@ class SettingsFragment : Fragment() {
             setNavigationOnClickListener { findNavController().navigateUp() }
         }
 
+        currencySetting.apply {
+            settingTitleTextView.text = getString(R.string.currency)
+            root.setOnClickListener {
+                val action = SettingsFragmentDirections
+                    .actionSettingsFragmentToSingleChoiceListDialogFragment(
+                        R.string.currency_pick_dialog_title,
+                        R.array.currency_items,
+                        CHANGE_CURRENCY_REQUEST_KEY
+                    )
+                findNavController().navigate(action)
+            }
+        }
+
         themeSetting.apply {
             settingTitleTextView.text = getString(R.string.theme)
             root.setOnClickListener {
@@ -97,6 +116,13 @@ class SettingsFragment : Fragment() {
         launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 launch {
+                    viewModel.currencyFlow.collectLatest {
+                        binding.currencySetting.settingSubtitleTextView.text =
+                            resources.getStringArray(R.array.currency_items)[it.ordinal]
+                    }
+                }
+
+                launch {
                     viewModel.themeFlow.collectLatest {
                         binding.themeSetting.settingSubtitleTextView.text =
                             resources.getStringArray(R.array.theme_items)[it.ordinal]
@@ -123,6 +149,7 @@ class SettingsFragment : Fragment() {
 
     companion object {
 
+        const val CHANGE_CURRENCY_REQUEST_KEY = "CHANGE_CURRENCY_REQUEST"
         const val CHANGE_THEME_REQUEST_KEY = "CHANGE_THEME_REQUEST"
         const val CHANGE_LOCALE_REQUEST_KEY = "CHANGE_LOCALE_REQUEST"
 

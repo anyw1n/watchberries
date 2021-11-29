@@ -66,4 +66,6 @@
         <item>Светлая</item>
         <item>Тёмная</item>
     </string-array>
+    <string name="currency">Валюта</string>
+    <string name="currency_pick_dialog_title">Выберите валюту</string>
 </resources>

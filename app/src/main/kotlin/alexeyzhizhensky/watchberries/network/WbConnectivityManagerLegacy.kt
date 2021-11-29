@@ -12,10 +12,11 @@ class WbConnectivityManagerLegacy(
     private val context: Context
 ) : WbConnectivityManager(context) {
 
-    override fun getConnectStatus(): Boolean? = connectivityManager?.let {
-        val networkInfo = it.activeNetworkInfo ?: return false
-        networkInfo.isConnectedOrConnecting
-    }
+    override val isConnected: Boolean?
+        get() = connectivityManager?.let {
+            val networkInfo = it.activeNetworkInfo ?: return false
+            networkInfo.isConnectedOrConnecting
+        }
 
     override fun subscribe() {
         context.registerReceiver(networkReceiver, IntentFilter(CONNECTIVITY_ACTION))
