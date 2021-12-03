@@ -8,6 +8,7 @@ import android.net.ConnectivityManager.CONNECTIVITY_ACTION
 import android.net.ConnectivityManager.EXTRA_NETWORK_INFO
 import android.net.NetworkInfo
 
+@Suppress("Deprecation")
 class WbConnectivityManagerLegacy(
     private val context: Context
 ) : WbConnectivityManager(context) {
