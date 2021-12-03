@@ -5,6 +5,7 @@ plugins {
     id 'com.google.gms.google-services'
     id 'dagger.hilt.android.plugin'
     id 'androidx.navigation.safeargs.kotlin'
+    id 'de.mannodermaus.android-junit5'
 }
 
 android {
@@ -38,6 +39,23 @@ android {
 
     buildFeatures {
         viewBinding true
+    }
+
+    sourceSets.each {
+        it.java.srcDirs += "src/$it.name/kotlin"
+    }
+
+    testOptions {
+        junitPlatform {
+            filters {
+                engines {
+                    include 'spek2'
+                }
+            }
+        }
+        unitTests.all {
+            testLogging.events = ["passed", "skipped", "failed"]
+        }
     }
 }
 
@@ -76,4 +94,17 @@ dependencies {
     coreLibraryDesugaring "com.android.tools:desugar_jdk_libs:$rootProject.desugarJdkLibsVersion"
     implementation "androidx.core:core-ktx:$rootProject.coreVersion"
     implementation "androidx.appcompat:appcompat:$rootProject.appCompatVersion"
+
+    // Test
+    testImplementation "org.junit.jupiter:junit-jupiter:$rootProject.jUnitVersion"
+
+    testImplementation "org.spekframework.spek2:spek-dsl-jvm:$rootProject.spekVersion"
+    testImplementation "org.spekframework.spek2:spek-runner-junit5:$rootProject.spekVersion"
+
+    testImplementation "io.mockk:mockk:$rootProject.mockkVersion"
+
+    testImplementation "io.strikt:strikt-core:$rootProject.striktVersion"
+
+    testImplementation "org.jetbrains.kotlin:kotlin-reflect:$rootProject.kotlinVersion"
+    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$rootProject.coroutinesTestVersion"
 }

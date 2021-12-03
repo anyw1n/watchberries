@@ -5,25 +5,31 @@ buildscript {
         minSdkVersion = 21
         targetSdkVersion = 31
 
+        androidJUnitVersion = '1.8.0.0'
         appCompatVersion = '1.4.0'
         coilVersion = '1.4.0'
         constraintLayoutVersion = '2.1.2'
         coreVersion = '1.7.0'
+        coroutinesTestVersion = '1.6.0-RC'
         desugarJdkLibsVersion = '1.1.5'
         firebaseBomVersion = '29.0.0'
         fragmentVersion = '1.4.0'
         googleServicesVersion = '4.3.10'
         gradleVersion = '7.0.3'
         hiltVersion = '2.40.4'
+        jUnitVersion = '5.8.2'
         kotlinVersion = '1.6.0'
         lifecycleVersion = '2.4.0'
         lottieVersion = '4.2.2'
         materialVersion = '1.4.0'
+        mockkVersion = '1.12.1'
         mpAndroidChartVersion = '3.1.0'
         navigationVersion = '2.3.5'
         pagingVersion = '3.1.0'
         retrofitVersion = '2.9.0'
         roomVersion = '2.4.0-beta02'
+        spekVersion = '2.0.17'
+        striktVersion = '0.33.0'
         swipeRefreshLayoutVersion = '1.1.0'
     }
 
@@ -41,6 +47,8 @@ buildscript {
 
         classpath "com.android.tools.build:gradle:$gradleVersion"
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
+
+        classpath "de.mannodermaus.gradle.plugins:android-junit5:$androidJUnitVersion"
     }
 }
 
