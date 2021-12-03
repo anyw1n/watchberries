@@ -1,9 +1,9 @@
 package alexeyzhizhensky.watchberries.ui
 
 import alexeyzhizhensky.watchberries.R
-import alexeyzhizhensky.watchberries.data.LocaleUtils
+import alexeyzhizhensky.watchberries.data.LocaleSettings
 import alexeyzhizhensky.watchberries.data.Price
-import alexeyzhizhensky.watchberries.data.ThemeUtils
+import alexeyzhizhensky.watchberries.data.ThemeSettings
 import alexeyzhizhensky.watchberries.databinding.FragmentSettingsBinding
 import alexeyzhizhensky.watchberries.viewmodels.SettingsViewModel
 import android.os.Bundle
@@ -38,12 +38,12 @@ class SettingsFragment : Fragment() {
         }
 
         setFragmentResultListener(CHANGE_THEME_REQUEST_KEY) { _, bundle ->
-            val theme = ThemeUtils.Theme.values[bundle.getInt(INDEX_KEY)]
+            val theme = ThemeSettings.Theme.values[bundle.getInt(INDEX_KEY)]
             viewModel.changeTheme(theme)
         }
 
         setFragmentResultListener(CHANGE_LOCALE_REQUEST_KEY) { _, bundle ->
-            val locale = LocaleUtils.SupportedLocale.values[bundle.getInt(INDEX_KEY)]
+            val locale = LocaleSettings.SupportedLocale.values[bundle.getInt(INDEX_KEY)]
             viewModel.changeLocale(locale)
         }
     }

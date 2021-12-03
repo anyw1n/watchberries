@@ -1,14 +1,13 @@
 package alexeyzhizhensky.watchberries.data
 
-import alexeyzhizhensky.watchberries.utils.Utils
 import androidx.appcompat.app.AppCompatDelegate
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class ThemeUtils @Inject constructor(
+class ThemeSettings @Inject constructor(
     sharedPrefsRepository: SharedPrefsRepository
-) : Utils<ThemeUtils.Theme>(sharedPrefsRepository) {
+) : Settings<ThemeSettings.Theme>(sharedPrefsRepository) {
 
     override val clazz: Class<Theme> = Theme::class.java
     override val key: String = "THEME"

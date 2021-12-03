@@ -2,7 +2,7 @@ package alexeyzhizhensky.watchberries.messaging
 
 import alexeyzhizhensky.watchberries.R
 import alexeyzhizhensky.watchberries.WbNotificationManager
-import alexeyzhizhensky.watchberries.data.LocaleUtils
+import alexeyzhizhensky.watchberries.data.LocaleSettings
 import alexeyzhizhensky.watchberries.data.UserRepository
 import android.app.ActivityManager
 import android.content.Context
@@ -91,6 +91,6 @@ class MessagingService : FirebaseMessagingService() {
     }
 
     override fun attachBaseContext(newBase: Context?) {
-        super.attachBaseContext(newBase?.let { LocaleUtils.getLocalizedContext(it) })
+        super.attachBaseContext(newBase?.let { LocaleSettings.getLocalizedContext(it) })
     }
 }

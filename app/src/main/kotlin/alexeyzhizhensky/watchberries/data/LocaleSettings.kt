@@ -1,6 +1,5 @@
 package alexeyzhizhensky.watchberries.data
 
-import alexeyzhizhensky.watchberries.utils.Utils
 import android.content.Context
 import android.content.res.Configuration
 import java.util.Locale
@@ -8,9 +7,9 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class LocaleUtils @Inject constructor(
+class LocaleSettings @Inject constructor(
     sharedPrefsRepository: SharedPrefsRepository
-) : Utils<LocaleUtils.SupportedLocale>(sharedPrefsRepository) {
+) : Settings<LocaleSettings.SupportedLocale>(sharedPrefsRepository) {
 
     override val clazz: Class<SupportedLocale> = SupportedLocale::class.java
     override val key: String = KEY

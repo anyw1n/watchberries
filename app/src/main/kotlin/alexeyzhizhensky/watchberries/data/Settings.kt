@@ -1,10 +1,9 @@
-package alexeyzhizhensky.watchberries.utils
+package alexeyzhizhensky.watchberries.data
 
-import alexeyzhizhensky.watchberries.data.SharedPrefsRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
-abstract class Utils<T>(
+abstract class Settings<T>(
     private val sharedPrefsRepository: SharedPrefsRepository
 ) {
 

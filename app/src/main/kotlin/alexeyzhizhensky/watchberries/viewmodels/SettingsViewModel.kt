@@ -1,35 +1,35 @@
 package alexeyzhizhensky.watchberries.viewmodels
 
-import alexeyzhizhensky.watchberries.data.CurrencyUtils
-import alexeyzhizhensky.watchberries.data.LocaleUtils
+import alexeyzhizhensky.watchberries.data.CurrencySettings
+import alexeyzhizhensky.watchberries.data.LocaleSettings
 import alexeyzhizhensky.watchberries.data.Price
-import alexeyzhizhensky.watchberries.data.ThemeUtils
+import alexeyzhizhensky.watchberries.data.ThemeSettings
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
 class SettingsViewModel @Inject constructor(
-    private val currencyUtils: CurrencyUtils,
-    private val themeUtils: ThemeUtils,
-    private val localeUtils: LocaleUtils
+    private val currencySettings: CurrencySettings,
+    private val themeSettings: ThemeSettings,
+    private val localeSettings: LocaleSettings
 ) : BaseViewModel<SettingsViewModel.Event>() {
 
-    val currencyFlow = currencyUtils.stateFlow
-    val themeFlow = themeUtils.stateFlow
-    val localeFlow = localeUtils.stateFlow
+    val currencyFlow = currencySettings.stateFlow
+    val themeFlow = themeSettings.stateFlow
+    val localeFlow = localeSettings.stateFlow
 
     fun changeCurrency(currency: Price.Currency) {
-        currencyUtils.setValue(currency)
+        currencySettings.setValue(currency)
     }
 
-    fun changeTheme(theme: ThemeUtils.Theme) {
+    fun changeTheme(theme: ThemeSettings.Theme) {
         if (theme == themeFlow.value) return
-        themeUtils.setValue(theme)
+        themeSettings.setValue(theme)
     }
 
-    fun changeLocale(locale: LocaleUtils.SupportedLocale) {
+    fun changeLocale(locale: LocaleSettings.SupportedLocale) {
         if (locale == localeFlow.value) return
-        localeUtils.setValue(locale)
+        localeSettings.setValue(locale)
         _eventFlow.tryEmit(Event.RecreateActivity)
     }
 

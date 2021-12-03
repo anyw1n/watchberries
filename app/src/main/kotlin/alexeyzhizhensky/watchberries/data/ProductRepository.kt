@@ -13,14 +13,14 @@ import javax.inject.Singleton
 
 @Singleton
 class ProductRepository @Inject constructor(
-    currencyUtils: CurrencyUtils,
+    currencySettings: CurrencySettings,
     private val userRepository: UserRepository,
     private val remoteMediator: ProductsRemoteMediator,
     private val service: WbApiService,
     private val productDao: ProductDao
 ) {
 
-    private val currencyFlow = currencyUtils.stateFlow
+    private val currencyFlow = currencySettings.stateFlow
 
     @OptIn(ExperimentalPagingApi::class)
     fun observePaginated() = Pager(

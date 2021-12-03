@@ -1,6 +1,6 @@
 package alexeyzhizhensky.watchberries
 
-import alexeyzhizhensky.watchberries.data.LocaleUtils
+import alexeyzhizhensky.watchberries.data.LocaleSettings
 import alexeyzhizhensky.watchberries.network.WbConnectivityManager
 import android.content.Context
 import android.os.Bundle
@@ -15,7 +15,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
     lateinit var connectivityManager: WbConnectivityManager
 
     override fun attachBaseContext(newBase: Context?) {
-        super.attachBaseContext(newBase?.let { LocaleUtils.getLocalizedContext(it) })
+        super.attachBaseContext(newBase?.let { LocaleSettings.getLocalizedContext(it) })
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

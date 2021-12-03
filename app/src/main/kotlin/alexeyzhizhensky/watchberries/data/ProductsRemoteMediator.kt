@@ -20,8 +20,8 @@ import javax.inject.Inject
 
 @OptIn(ExperimentalPagingApi::class)
 class ProductsRemoteMediator @Inject constructor(
-    sortUtils: SortUtils,
-    currencyUtils: CurrencyUtils,
+    sortSettings: SortSettings,
+    currencySettings: CurrencySettings,
     private val userRepository: UserRepository,
     private val service: WbApiService,
     private val db: WbDatabase,
@@ -30,8 +30,8 @@ class ProductsRemoteMediator @Inject constructor(
 ) : RemoteMediator<Int, Product>() {
 
     private val initialPage = WbApiService.INITIAL_PAGE
-    private val sortFlow = sortUtils.stateFlow
-    private val currencyFlow = currencyUtils.stateFlow
+    private val sortFlow = sortSettings.stateFlow
+    private val currencyFlow = currencySettings.stateFlow
 
     override suspend fun initialize() = InitializeAction.LAUNCH_INITIAL_REFRESH
 

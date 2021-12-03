@@ -13,13 +13,13 @@ import javax.inject.Singleton
 
 @Singleton
 class PriceRepository @Inject constructor(
-    currencyUtils: CurrencyUtils,
+    currencySettings: CurrencySettings,
     private val service: WbApiService,
     private val priceDao: PriceDao,
     private val db: WbDatabase
 ) {
 
-    private val currencyFlow = currencyUtils.stateFlow
+    private val currencyFlow = currencySettings.stateFlow
 
     @OptIn(ExperimentalCoroutinesApi::class)
     fun getPricesFlow(sku: Int) = priceDao.getBySku(sku).mapLatest { list ->
